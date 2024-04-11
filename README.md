@@ -33,8 +33,6 @@ For the backend Node.js and Express.js application, we're leveraging Google Kube
 
 In designing our Recipe Sharing Platform, we've focused on creating a user-friendly and intuitive interface that encourages engagement and collaboration among our users. We've adopted a clean and minimalist design aesthetic, prioritizing readability and ease of navigation. Additionally, we've implemented responsive design principles to ensure our platform is accessible across devices of all sizes, from desktops to smartphones.
 
-To enhance the user experience, we've incorporated features such as infinite scrolling for browsing recipes, real-time notifications for updates and interactions, and a personalized recommendation engine based on user preferences and behavior.
-
 In terms of architecture, we've embraced a microservices approach, decoupling our frontend and backend components to promote scalability and maintainability. Our frontend React.js application communicates with our backend Node.js and Express.js API through RESTful endpoints, enabling modular development and independent scaling of frontend and backend services.
 
 ## Team Coordination Processes
