@@ -1,0 +1,47 @@
+/* LandingPage.css */
+.landing-page {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 50px; /* Increased padding for better spacing */
+  background-image: url("https://images.pexels.com/photos/349609/pexels-photo-349609.jpeg?auto=compress&cs=tinysrgb&w=800");
+  /*background: #8AAAE5;*/
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+}
+
+
+.left-half {
+  width: 50%;
+  padding-right: 40px; /* Increased padding for better spacing */
+}
+
+.right-half {
+  width: 50%;
+  align-items: center;
+}
+
+.landing-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.tagline {
+  font-size: 150px;
+  margin-top: 20px;
+  color: #333; /* Dark text color */
+  font-style: italic;
+  font-weight: 150;
+  padding-left: 200px;
+}
+
+.toggle-link {
+  color: #007bff; /* Blue link color */
+  cursor: pointer;
+}
+
+.toggle-link:hover {
+  text-decoration: underline;
+}
