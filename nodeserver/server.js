@@ -26,7 +26,7 @@ app.post('/api/register', async (req,res) =>{
     return res.status(400).json({ message: 'Password Mismatch' });
   }
   if (existingUser) {
-    return res.status(400).json({ message: 'Username already exists' });
+    return res.status(400).json({ message: 'Already registered' });
   }
   try{
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,6 +40,26 @@ app.post('/api/register', async (req,res) =>{
   }
 })
   
+app.post('/api/login', (req, res)=>{
+  // To find record from the database
+  const {email, password} = req.body;
+  UsersDataModel.findOne({email: email})
+  .then(user => {
+      if(user){
+          // If user found then these 2 cases
+          if(user.password === password) {
+              res.status(200).json("Success");
+          }
+          else{
+              res.status(200).json("Wrong password");
+          }
+      }
+      // If user not found then 
+      else{
+          res.status(500).json("No records found! ");
+      }
+  })
+})
 
 // Start the server
 app.listen(port, () => {

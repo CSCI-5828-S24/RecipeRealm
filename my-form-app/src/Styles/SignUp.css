@@ -59,8 +59,10 @@ form h3{
   font-weight: 500;
   margin-left: 10px;
 }
+
 .input-box.button input{
-  width: 50%;
+  text-align: center;
+  width: fit-content;
   color: #fff;
   letter-spacing: 1px;
   border: none;
