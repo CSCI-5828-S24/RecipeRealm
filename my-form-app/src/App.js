@@ -10,7 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<LandingPage/>} />
-        <Route path="/home" element={<Homescreen/>} />
+        <Route exact path="/home" element={<Homescreen/>} />
       </Routes>
     </Router>
   );

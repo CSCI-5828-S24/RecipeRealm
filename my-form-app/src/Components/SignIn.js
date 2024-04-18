@@ -7,6 +7,7 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const naviagte = useNavigate();
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,18 +16,19 @@ const SignIn = () => {
   };
 
   return (
-    <div class="wrapper">
+    <div className="wrapper">
     <h2>Login to your account</h2>
     <form onSubmit={handleSubmit}>
-      <div class="input-box">
+      <div className="input-box">
         <input type="text" placeholder="Enter your email" required/>
       </div>
-      <div class="input-box">
+      <div className="input-box">
         <input type="password" placeholder="Create password" required/>
       </div>
-      <div class="input-box button">
-        <input type="Submit" value="Log In"/>
+      <div className="input-box button">
+        <input type="Submit" defaultValue="Log In"/>
       </div>
+      {error && <p style={{ whiteSpace: 'pre-wrap', marginBottom: '0', color:'red', fontWeight: 'bold' }} >{error}</p>}
     </form>
   </div>
   );

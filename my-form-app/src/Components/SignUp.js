@@ -1,36 +1,63 @@
 import React, { useState } from 'react';
 import '../Styles/SignUp.css';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confpassword, setConfPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle sign-up logic here
+  const handleRegister = async () => {
+    if (confpassword!==password){
+      console.error('Error:', 'Password and Confirmned Password Mismatch');
+      setMessage('Password and Confirmned Password Mismatch');
+    }
+    else{
+    try {
+      console.log('Posting')
+      const response = await fetch('http://localhost:3001/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name,email, password, confpassword }),
+      });
+      const data = await response.json();
+      setMessage(data.message);
+      if(response.status === 201){
+        navigate('/home')
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage('Error registering user');
+    }
+  }
   };
 
   return (
-    <div class="wrapper">
+    <div className="wrapper">
+    <form>
     <h2>Registration</h2>
-    <form onSubmit={handleSubmit}>
-      <div class="input-box">
-        <input type="text" placeholder="Enter your name" required/>
+      <div className="input-box">
+        <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Enter your name" required/>
       </div>
-      <div class="input-box">
-        <input type="text" placeholder="Enter your email" required/>
+      <div className="input-box">
+        <input type="text"  onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" required/>
       </div>
-      <div class="input-box">
-        <input type="password" placeholder="Create password" required/>
+      <div className="input-box">
+        <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Create password" required/>
       </div>
-      <div class="input-box">
-        <input type="password" placeholder="Confirm password" required/>
+      <div className="input-box">
+        <input type="password" onChange={(e) => setConfPassword(e.target.value)} placeholder="Confirm password" required/>
       </div>
-      <div class="input-box button">
-        <input type="Submit" value="Register Now"/>
+      <div className="input-box button">
+        <input onClick={handleRegister} defaultValue="Register Now"/>
       </div>
-    </form>
+      {message && <p style={{ whiteSpace: 'pre-wrap', marginBottom: '0', color:'red', fontWeight: 'bold' }} >{message}</p>}
+      </form>
   </div>
   );
 };

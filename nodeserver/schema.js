@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
 // Define a schema
-const formDataSchema = new mongoose.Schema({
-  data: String // Modify this based on your data structure
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String
 });
 
 // Create a model
-const FormDataModel = mongoose.model('FormData', formDataSchema);
-module.exports = FormDataModel;
+const UsersDataModel = mongoose.model('UsersData', UserSchema);
+module.exports = UsersDataModel;

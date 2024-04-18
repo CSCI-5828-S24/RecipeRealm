@@ -11,7 +11,7 @@ const LandingPage = () => {
     <div className="landing-page">
       <div className="left-half">
         {/* Image and Tagline */}
-        <h2 className = 'tagline'>Welcome to the Recipe Realm</h2>
+        <h2 class = 'tagline'>Welcome to the Recipe Realm</h2>
       </div>
       <div className="right-half">
         {/* Conditional rendering for Sign In or Sign Up form */}
