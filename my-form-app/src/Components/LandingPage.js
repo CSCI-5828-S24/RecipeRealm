@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import '../Styles/LandingPage.css';
-import logo from '../Images/recipebg.jpeg'
 
 const LandingPage = () => {
   const [showSignUp, setShowSignUp] = useState(false);

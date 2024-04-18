@@ -7,7 +7,6 @@ const AddRecipeForm = ({ onSubmit }) => {
   const [title, settitle] = useState('');
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [message, setMessage] = useState('');
 
