@@ -12,6 +12,11 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSignin = async() => {
+    if( !password || !email){
+      console.error('Error:', 'Enter all the fields');
+      setMessage('Enter all the fields');
+    }
+    else{
     try {
       setLoading(true);
       console.log('Posting')
@@ -34,6 +39,7 @@ const SignIn = () => {
     finally{
       setLoading(false);
     }
+  }
   };
 
   return (

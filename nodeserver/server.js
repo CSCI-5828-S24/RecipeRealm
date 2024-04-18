@@ -48,15 +48,15 @@ app.post('/api/login', (req, res)=>{
       if(user){
           // If user found then these 2 cases
           if(user.password === password) {
-              res.status(200).json("Success");
+              res.status(200).json({message: "Success"});
           }
           else{
-              res.status(200).json("Wrong password");
+              res.status(500).json({message:"Wrong password"});
           }
       }
       // If user not found then 
       else{
-          res.status(500).json("No records found! ");
+          res.status(500).json({message: "No records found! "});
       }
   })
 })

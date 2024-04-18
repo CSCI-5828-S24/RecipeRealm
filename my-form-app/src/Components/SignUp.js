@@ -14,7 +14,11 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
-    if (confpassword!==password){
+    if( !password || !name || !email){
+      console.error('Error:', 'Enter all the fields');
+      setMessage('Enter all the fields');
+    }
+    else if (confpassword!==password){
       console.error('Error:', 'Password and Confirmned Password Mismatch');
       setMessage('Password and Confirmned Password Mismatch');
     }
