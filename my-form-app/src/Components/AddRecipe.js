@@ -24,7 +24,7 @@ const AddRecipeForm = ({ onSubmit }) => {
     formData.append('author',sessionStorage.getItem('user'));
     try {
       console.log(formData)
-      const response = await axios.post('http://localhost:3001/api/user/addrecipe', formData, {
+      const response = await axios.post('https://reciperealm-lu8p.onrender.com/api/user/addrecipe', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
