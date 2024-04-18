@@ -7,6 +7,10 @@ const UserSchema = new mongoose.Schema({
   password: String
 });
 
+
+
+
 // Create a model
 const UsersDataModel = mongoose.model('UsersData', UserSchema);
+
 module.exports = UsersDataModel;

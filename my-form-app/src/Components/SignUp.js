@@ -36,6 +36,7 @@ const SignUp = () => {
         const data = await response.json();
         setMessage(data.message);
         if(response.status === 201){
+          sessionStorage.setItem('user', data.user);
           navigate('/home')
         }
       } catch (error) {

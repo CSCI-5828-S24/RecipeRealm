@@ -30,6 +30,7 @@ const SignIn = () => {
       const data = await response.json();
       setMessage(data.message);
       if(response.status === 200){
+        sessionStorage.setItem('user', data.user);
         navigate('/home')
       }
     } catch (error) {
