@@ -22,7 +22,7 @@ const Card = ({ title, author, likes,ingredients,description,imageUrl}) => {
       <div className="card-details">
         <h3>{title}</h3>
         <p className="description">By {description}</p>
-        <p className="ingredients">Likes: {ingredients}</p>
+        <p className="ingredients">Ingredients: {ingredients}</p>
         <p className="author">By {author}</p>
         <p className="likes">Likes {likes}</p>
       </div>

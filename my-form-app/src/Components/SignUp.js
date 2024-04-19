@@ -12,6 +12,7 @@ const SignUp = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const serverURL = process.env.REACT_APP_SERVER_URL;
 
   const handleRegister = async () => {
     if( !password || !name || !email){
@@ -26,7 +27,7 @@ const SignUp = () => {
       try {
         setLoading(true);
         console.log('Posting')
-        const response = await fetch('https://reciperealm-lu8p.onrender.com/api/register', {
+        const response = await fetch(`${serverURL}/api/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

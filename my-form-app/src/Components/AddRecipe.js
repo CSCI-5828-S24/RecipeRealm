@@ -9,6 +9,7 @@ const AddRecipeForm = ({ onSubmit }) => {
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [message, setMessage] = useState('');
+  const serverURL = process.env.REACT_APP_SERVER_URL;
 
   const handleSubmit = async () => {
     if(!title || !image || !description || !ingredients){
@@ -23,7 +24,7 @@ const AddRecipeForm = ({ onSubmit }) => {
     formData.append('author',sessionStorage.getItem('user'));
     try {
       console.log(formData)
-      const response = await axios.post('https://reciperealm-lu8p.onrender.com/api/user/addrecipe', formData, {
+      const response = await axios.post(`${serverURL}/api/user/addrecipe`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

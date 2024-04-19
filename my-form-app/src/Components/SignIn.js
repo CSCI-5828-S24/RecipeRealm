@@ -10,6 +10,7 @@ const SignIn = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const serverURL = process.env.REACT_APP_SERVER_URL;
 
   const handleSignin = async() => {
     if( !password || !email){
@@ -20,7 +21,7 @@ const SignIn = () => {
     try {
       setLoading(true);
       console.log('Posting')
-      const response = await fetch('https://reciperealm-lu8p.onrender.com/api/login', {
+      const response = await fetch(`${serverURL}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

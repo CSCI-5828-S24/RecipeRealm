@@ -31,9 +31,8 @@ mongoose.connect('mongodb+srv://shso8405:Cl72GrKwFvvEgKix@cluster0.ib7jtrh.mongo
 app.use(cors());
 // Middleware
 app.use(bodyParser.json());
-app.use(express.static('../my-from-app/public'))
 
-app.use(express.static('../my-from-app/src/Styles'))
+app.use('/images', express.static('./images'));
 
 app.post('/api/register', async (req,res) =>{
   const {name,email,password,confpassword} = req.body
@@ -85,13 +84,14 @@ app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
     return res.status(400).send('No file uploaded.');
   }
   console.log()
+  const serverAddress = req.get('host')
   const recipe = await RecipeDataModel.create({
     title: req.body.title,
     description: req.body.description,
     ingredients: req.body.ingredients,
     image:{
-    filePath: req.file.filename,
     fileName: req.file.originalname,
+    filePath: `http://${serverAddress}/images/${req.file.filename}`,
     likes:0,
     author:req.body.author
     }
@@ -100,6 +100,35 @@ app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
   await recipe.save();
   // Save the file to MongoDB and return the image URL
   res.send({ recipe });
+});
+
+app.get('/api/query', async (req,res) =>{
+  const {key} = req.query;
+  console.log(key);
+  if(key===''){
+    try {
+      const recipies = await RecipeDataModel.find({});
+      return res.status(200).json(recipies);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+  try {
+    const recipes = await RecipeDataModel.find({
+      $or: [
+        { title: { $regex: key, $options: 'i' } },
+        { description: { $regex: key, $options: 'i' } },
+        { ingredients: { $regex: key, $options: 'i' } },
+        { author: { $regex: key, $options: 'i' } },
+      ]
+    });
+    console.log(recipes);
+    return res.status(200).json(recipes);
+  } catch (error) {
+    console.error('Error searching:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 // Start the server
