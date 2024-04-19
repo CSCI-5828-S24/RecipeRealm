@@ -91,7 +91,7 @@ app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
     ingredients: req.body.ingredients,
     image:{
     fileName: req.file.originalname,
-    filePath: `http://${serverAddress}/images/${req.file.filename}`,
+    filePath: req.file.filename,
     likes:0,
     author:req.body.author
     }

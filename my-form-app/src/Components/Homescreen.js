@@ -76,7 +76,7 @@ const Homescreen = () => {
             title={recipeList[key].title}
             author={recipeList[key].author} 
             likes={recipeList[key].likes}
-            imageUrl={recipeList[key].image.filePath}
+            imageUrl={`${serverURL}/images/${recipeList[key].image.filePath}`}
             ingredients={recipeList[key].ingredients}
             description={recipeList[key].description}
             onClick={() => handleCardClick({key})}
