@@ -1,6 +1,5 @@
 // src/components/HomePage.js
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../Styles/Homescreen.css'
 import Card from './Card'
 import RecipeModal from './RecipeModal'
@@ -12,17 +11,10 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 const Homescreen = () => {
-  const navigate = useNavigate();
   const [filter, setFilter] = useState('');
   const [recipeList,setRecipeList] = useState('');
   const [loading, setLoading] = useState(false);
   const serverURL = process.env.REACT_APP_SERVER_URL;
-
-  // Function to handle card clicks
-  const handleCardClick = (id) => {
-    console.log(`Clicked on card with id ${id}`);
-    // Add your logic for handling card clicks here
-  };
 
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
 
@@ -71,16 +63,7 @@ const Homescreen = () => {
       </div>
       <div className="card-grid">
         {Object.keys(recipeList).map((key) => (
-          <Card
-            key={key}
-            title={recipeList[key].title}
-            author={recipeList[key].author} 
-            likes={recipeList[key].likes}
-            imageUrl={`${serverURL}/images/${recipeList[key].image.filePath}`}
-            ingredients={recipeList[key].ingredients}
-            description={recipeList[key].description}
-            onClick={() => handleCardClick({key})}
-          />
+          <Card recipe={recipeList[key]} />
         ))}
       </div>
     </div>

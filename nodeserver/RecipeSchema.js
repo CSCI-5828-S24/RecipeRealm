@@ -22,9 +22,25 @@ const RecipeSchema =  new mongoose.Schema({
         type: String,
         required: true,
       },
-      likes: Number,
-      author: String,
     },
+    steps:{
+      type: String,
+      required: true,
+    },
+    comments:[{
+      comment:{
+        type:String,
+      },
+      commentator:{
+        type: String,
+      }
+    }],
+    likes:{
+      type: Number,
+    },
+    author:{
+      type: String,
+    }
   });
 
   const RecipeDataModel = mongoose.model('RecipeData', RecipeSchema);

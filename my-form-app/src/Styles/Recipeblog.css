@@ -1,0 +1,147 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+}
+
+.recipe-container {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px;
+}
+
+.recipe {
+  text-align: left;
+}
+
+.recipe img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.author {
+  font-style: italic;
+  color: #555;
+}
+
+.like-btn-unliked {
+  background-color: #ccc;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.like-btn-unliked:hover {
+  background-color: #cccccc5e;
+}
+
+
+.like-btn-liked {
+  background-color: rgba(255, 0, 0, 0.768);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.like-btn-liked:hover {
+  background-color: rgba(255, 0, 0, 0.498)
+}
+
+.likes {
+  font-weight: bold;
+}
+
+.ingredients {
+  margin-top: 20px;
+}
+
+.instructions {
+  margin-top: 20px;
+}
+
+.instructions ol {
+  list-style-position: inside;
+}
+
+.comment-section {
+  margin-top: 20px;
+}
+
+.commenter-input,
+.comment-input {
+  width: calc(100% - 20px); /* Adjusting for padding */
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.comment-submit-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comment-submit-btn:hover {
+  background-color: #45a049;
+}
+
+.comments {
+  margin-top: 20px;
+}
+
+.comment {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.comment-author {
+  font-style: italic;
+  color: #888;
+}
+
+/* Custom Styling */
+.recipe h1 {
+  color: #333;
+}
+
+.recipe h2 {
+  color: #555;
+}
+
+.recipe p {
+  color: #777;
+}
+
+.comment-section textarea {
+  height: 100px;
+}
+
+.back-btn {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  text-decoration: none;
+  color: #fff;
+  padding: 5px 10px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: #333;
+}
+
+.back-btn:hover {
+  background-color: #555;
+}

@@ -1,34 +1,28 @@
 import React from 'react';
 import '../Styles/Card.css'
-import CardModal from './CardModal';
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Card = ({ title, author, likes,ingredients,description,imageUrl}) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const Card = ({key,recipe}) => {
+  
+  const serverURL = process.env.REACT_APP_SERVER_URL;
+  const navigate = useNavigate();
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const handleCardClick = () => {
+    navigate(`/recipe/${recipe._id}`, { state: { recipeData: recipe } });
   };
   return (
-    <>
-    <div className="card" onClick={openModal}>
+    <div className="card" onClick={handleCardClick}>
       <div className="card-image">
-        <img src={imageUrl} alt={title} />
+        <img src = {`${serverURL}/images/${recipe.image.filePath}`} alt={recipe.title} />
       </div>
-      <div className="card-details">
-        <h3>{title}</h3>
-        <p className="description">By {description}</p>
-        <p className="ingredients">Ingredients: {ingredients}</p>
-        <p className="author">By {author}</p>
-        <p className="likes">Likes {likes}</p>
+      <div className="card-details">  
+        <h3>{recipe.title}</h3>
+        <p className="description">By {recipe.description}</p>
+        <p className="ingredients">Ingredients: {recipe.ingredients}</p>
+        <p className="author">By {recipe.author}</p>
+        <p className="likes">Likes {recipe.likes}</p>
       </div>
     </div>
-    <CardModal isOpen={isModalOpen} onClose={closeModal} content={{ title, author, likes,ingredients,description,imageUrl }} />
-    </>
   );
 };
 

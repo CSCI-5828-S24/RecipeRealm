@@ -1,6 +1,6 @@
 // Modal.js
 import React from 'react';
-import '../Styles/Modal.css'; // Import CSS for styling
+import '../Styles/RecipeModal.css'; // Import CSS for styling
 
 const Modal = ({ isOpen, onClose, children }) => {
   const handleClose = () => {

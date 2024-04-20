@@ -92,9 +92,14 @@ app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
     image:{
     fileName: req.file.originalname,
     filePath: req.file.filename,
+    },
     likes:0,
+    comments:{
+      comment:'',
+      commentator:'',
+    },
+    steps:req.body.steps,
     author:req.body.author
-    }
   })
   console.log(recipe)
   await recipe.save();
@@ -128,6 +133,43 @@ app.get('/api/query', async (req,res) =>{
   } catch (error) {
     console.error('Error searching:', error);
     return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+app.put('/api/recipes/:id/like', async (req, res) => {
+  const { id } = req.params;
+  const { likes } = req.body;
+  try {
+    // Find the recipe by ID and update the likes count
+    const recipe = await RecipeDataModel.findByIdAndUpdate(id, { likes: Number(likes) }, { new: true });
+    if (!recipe) {
+      return res.status(404).json({ error: 'Recipe not found' });
+    }
+    res.status(201).json(recipe);
+  } catch (error) {
+    console.error('Error updating like count:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.put('/api/recipes/:id/postcomment', async (req, res) => {
+  const { id } = req.params;
+  const { comment, commentator } = req.body;
+  try {
+    // Find the recipe by ID and update the likes count
+    const recipe = await RecipeDataModel.findById(id);
+    if (!recipe) {
+      return res.status(404).json({ error: 'Recipe not found' });
+    }
+    recipe.comments.push({ comment, commentator });
+    const updatedRecipe = await recipe.save();
+    console.log(updatedRecipe.comments)
+    res.status(201).json({UpdatedComments: updatedRecipe.comments});
+
+  } catch (error) {
+    console.error('Error updating like count:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

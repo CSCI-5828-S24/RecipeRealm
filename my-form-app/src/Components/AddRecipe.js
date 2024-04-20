@@ -8,6 +8,7 @@ const AddRecipeForm = ({ onSubmit }) => {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState('');
+  const [steps, setSteps] = useState('');
   const [message, setMessage] = useState('');
   const serverURL = process.env.REACT_APP_SERVER_URL;
 
@@ -21,6 +22,7 @@ const AddRecipeForm = ({ onSubmit }) => {
     formData.append('title',title);
     formData.append('description',description);
     formData.append('ingredients',ingredients);
+    formData.append('steps',steps);
     formData.append('author',sessionStorage.getItem('user'));
     try {
       console.log(formData)
@@ -49,6 +51,8 @@ const AddRecipeForm = ({ onSubmit }) => {
       <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} required/>
       <label>Ingredients:</label>
       <textarea value={ingredients} onChange={(e) => setIngredients(e.target.value)} required></textarea>
+      <label>Steps:</label>
+      <textarea value={steps} onChange={(e) => setSteps(e.target.value)} required></textarea>
       <button onClick={handleSubmit}>Submit</button>
     </form>
     {message && <p style={{ whiteSpace: 'pre-wrap', marginBottom: '0', color:'red', fontWeight: 'bold' }} >{message}</p>}

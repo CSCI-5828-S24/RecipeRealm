@@ -19,7 +19,7 @@
     color: #555;
   }
   
-  .form-container input[type="text"],
+  .form-container input,
   .form-container textarea {
     padding: 10px;
     border: 1px solid #ccc;
