@@ -30,6 +30,7 @@
   .form-container textarea {
     height: 100px; /* Adjust height for textarea */
     width: 80vh;
+    white-space: pre-wrap;
   }
   
   .form-container button {

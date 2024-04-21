@@ -6,16 +6,31 @@ import axios from 'axios';
 // Component for displaying the recipe
 const Recipeblog = () => {
 
-  const [liked, setLiked] = useState(false);
+  const isValuePresent = (obj, targetValue) => {
+    if (Array.isArray(obj)) {
+      for (const item of obj) {
+        if (item === targetValue) {
+          return true;
+        }
+        if (typeof item === 'object' && isValuePresent(item, targetValue)) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+
   const location = useLocation();
   const recipe = location.state ? location.state.recipeData : null;
+  const [liked, setLiked] = useState(isValuePresent(recipe.likedby, sessionStorage.getItem('user_email')));
   const serverURL = process.env.REACT_APP_SERVER_URL;
-  const [likes, setLikes] = useState(recipe.likes);
+  const [likes, setLikes] = useState(recipe.likedby.length);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(recipe.comments);
 
   
   const handleLike = () => {
+    console.log(liked)
     if(!liked){
     setLikes(likes + 1);
     setLiked(!liked)
@@ -24,7 +39,7 @@ const Recipeblog = () => {
       setLikes(likes - 1);
       setLiked(!liked)
     }
-
+    handlelikes();
   };
 
   const handleCommentSubmit = async() => {
@@ -43,26 +58,25 @@ const Recipeblog = () => {
 };
 
   const handlelikes = async() => {
-    if(liked){
       try {
         // Send a PUT request to the server to update the like count in the database
-        const response = await axios.put(`${serverURL}/api/recipes/${recipe._id}/like`, { likes: likes });
+        console.log(recipe)
+        const response = await axios.put(`${serverURL}/api/recipes/${recipe._id}/like`, { user_email: sessionStorage.getItem('user_email'), liked: !liked });
         if (response.status!=201) {
           throw new Error('Failed to update like count');
         }
       } catch (error) {
         console.error('Error updating like count:', error);
       }
-    }
   }
 
   return (
           <div className="recipe-container">
             <div className="recipe">
-            <Link to="/home" onClick = {handlelikes} className="back-btn">Back to Home</Link> {/* Link to the home page */}
+            <Link to="/home" className="back-btn">Back to Home</Link> {/* Link to the home page */}
               <h1>{recipe.title}</h1>
               <img src={`${serverURL}/images/${recipe.image.filePath}`} alt={recipe.title} />
-              <p className="author">Author: {recipe.author}</p>
+              <p className="author">Author: {recipe.name}</p>
               <button className={liked ? 'like-btn-liked': 'like-btn-unliked'} onClick={handleLike}>Like</button>
               <p className="likes">Likes: {likes}</p>
               <div className="ingredients">
@@ -85,9 +99,9 @@ const Recipeblog = () => {
               <h2>Comments:</h2>
               <div className="comments">
               {Object.keys(comments).map((key) => (
-                  <div className="comment">
+                  <div key = {key} className="comment">
                     <p>{comments[key].comment}</p>
-                    <span className="comment-author">- {comments[key].commenter}</span>
+                    <span className="comment-author">- {comments[key].commentator}</span>
                   </div>
                 ))}
               </div>

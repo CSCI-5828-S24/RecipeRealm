@@ -23,7 +23,8 @@ const AddRecipeForm = ({ onSubmit }) => {
     formData.append('description',description);
     formData.append('ingredients',ingredients);
     formData.append('steps',steps);
-    formData.append('author',sessionStorage.getItem('user'));
+    formData.append('author_name',sessionStorage.getItem('user_name'));
+    formData.append('author_email',sessionStorage.getItem('user_email'));
     try {
       console.log(formData)
       const response = await axios.post(`${serverURL}/api/user/addrecipe`, formData, {

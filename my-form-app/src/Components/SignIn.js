@@ -31,7 +31,8 @@ const SignIn = () => {
       const data = await response.json();
       setMessage(data.message);
       if(response.status === 200){
-        sessionStorage.setItem('user', data.user);
+        sessionStorage.setItem('user_name', data.user_name);
+        sessionStorage.setItem('user_email', data.user_email);
         navigate('/home')
       }
     } catch (error) {

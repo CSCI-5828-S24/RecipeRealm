@@ -47,7 +47,7 @@ app.post('/api/register', async (req,res) =>{
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new UsersDataModel({ name:name ,email:email, password: hashedPassword });
     await newUser.save();
-    res.status(201).json({ message: 'User Saved Succesfully', user:name});
+    res.status(201).json({ message: 'User Saved Succesfully', user_name:newUser.name, user_email:newUser.email});
   }
   catch (error){
     console.error(error);
@@ -64,7 +64,7 @@ app.post('/api/login', async (req, res)=>{
       // If user found
       const match = await bcrypt.compare(password, user.password);
       if (match) {
-        res.status(200).json({ message: "Success", user: user.name });
+        res.status(200).json({ message: "Success", user_name:user.name, user_email:user.email });
       } else {
         res.status(500).json({ message: "Wrong password" });
       }
@@ -83,8 +83,7 @@ app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
-  console.log()
-  const serverAddress = req.get('host')
+  //console.log(req.body.author_name,req.body.author_email);
   const recipe = await RecipeDataModel.create({
     title: req.body.title,
     description: req.body.description,
@@ -93,15 +92,16 @@ app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
     fileName: req.file.originalname,
     filePath: req.file.filename,
     },
-    likes:0,
     comments:{
       comment:'',
       commentator:'',
     },
     steps:req.body.steps,
-    author:req.body.author
+    author:{
+      name:req.body.author_name,
+      email:req.body.author_email
+    }
   })
-  console.log(recipe)
   await recipe.save();
   // Save the file to MongoDB and return the image URL
   res.send({ recipe });
@@ -109,7 +109,6 @@ app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
 
 app.get('/api/query', async (req,res) =>{
   const {key} = req.query;
-  console.log(key);
   if(key===''){
     try {
       const recipies = await RecipeDataModel.find({});
@@ -128,7 +127,6 @@ app.get('/api/query', async (req,res) =>{
         { author: { $regex: key, $options: 'i' } },
       ]
     });
-    console.log(recipes);
     return res.status(200).json(recipes);
   } catch (error) {
     console.error('Error searching:', error);
@@ -136,17 +134,24 @@ app.get('/api/query', async (req,res) =>{
   }
 });
 
-
 app.put('/api/recipes/:id/like', async (req, res) => {
   const { id } = req.params;
-  const { likes } = req.body;
+  const { user_email,liked } = req.body;
+  console.log(user_email,liked)
   try {
     // Find the recipe by ID and update the likes count
-    const recipe = await RecipeDataModel.findByIdAndUpdate(id, { likes: Number(likes) }, { new: true });
+    const recipe = await RecipeDataModel.findById(id);
     if (!recipe) {
       return res.status(404).json({ error: 'Recipe not found' });
     }
-    res.status(201).json(recipe);
+    if(liked){
+    recipe.likedby.push(user_email);
+    }
+    else{
+      recipe.likedby.pull(user_email );
+    }
+    const updatedRecipe = await recipe.save()
+    res.status(201).json(updatedRecipe);
   } catch (error) {
     console.error('Error updating like count:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -164,8 +169,7 @@ app.put('/api/recipes/:id/postcomment', async (req, res) => {
     }
     recipe.comments.push({ comment, commentator });
     const updatedRecipe = await recipe.save();
-    console.log(updatedRecipe.comments)
-    res.status(201).json({UpdatedComments: updatedRecipe.comments});
+    res.status(201).json(updatedRecipe);
 
   } catch (error) {
     console.error('Error updating like count:', error);

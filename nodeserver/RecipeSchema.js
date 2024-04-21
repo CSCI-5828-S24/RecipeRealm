@@ -35,11 +35,18 @@ const RecipeSchema =  new mongoose.Schema({
         type: String,
       }
     }],
-    likes:{
-      type: Number,
-    },
-    author:{
+    likedby:[{
       type: String,
+    }],
+    author:{
+      name:{
+        type: String,
+        required:true,
+      },
+      email:{
+        type: String,
+        required:true,
+      }
     }
   });
 
