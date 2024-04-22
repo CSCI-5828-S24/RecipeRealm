@@ -9,6 +9,7 @@ const RecipeDataModel = require('./RecipeSchema.js');
 const UsersDataModel = require('./UserSchema.js');
 const port = process.env.PORT || 3001;
 const fs = require('fs');
+const { stringify } = require('querystring');
 
 // Connect to MongoDB Atlas
 mongoose.connect('mongodb+srv://shso8405:Cl72GrKwFvvEgKix@cluster0.ib7jtrh.mongodb.net/')
@@ -47,7 +48,7 @@ app.post('/api/register', async (req,res) =>{
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new UsersDataModel({ name:name ,email:email, password: hashedPassword });
     await newUser.save();
-    res.status(201).json({ message: 'User Saved Succesfully', user_name:newUser.name, user_email:newUser.email});
+    res.status(201).json({ message: 'User Saved Succesfully', user_name:newUser.name, user_email:newUser.email, user_saved_recipies: newUser.savedRecipies});
   }
   catch (error){
     console.error(error);
@@ -64,7 +65,7 @@ app.post('/api/login', async (req, res)=>{
       // If user found
       const match = await bcrypt.compare(password, user.password);
       if (match) {
-        res.status(200).json({ message: "Success", user_name:user.name, user_email:user.email });
+        res.status(200).json({ message: "Success", user_name:user.name, user_email:user.email ,user_saved_recipies: user.savedRecipies});
       } else {
         res.status(500).json({ message: "Wrong password" });
       }
@@ -107,6 +108,43 @@ app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
   res.send({ recipe });
 });
 
+app.put('/api/user/saverecipe/:id', async (req,res) =>{
+  const {user_email,saved} = req.body
+  const { id } = req.params;
+  try{
+    const user = await UsersDataModel.findOne({ email: user_email });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    if(saved){
+      user.savedRecipies.push(id)
+    }
+    else{
+      user.savedRecipies.pull(id)
+    }
+    const updatedUser =  await user.save();
+    res.status(201).json(updatedUser);
+  }
+  catch (error) {
+    console.error('Error fetching data:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+
+});
+
+app.get('/api/user/:email', async (req,res) => {
+  const {email} = req.params;
+  try{
+  const user = await UsersDataModel.findOne({ email });
+  console.log(user)
+  return res.status(200).json(user);
+  }
+  catch(error){
+    console.error('Error fetching data:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 app.get('/api/query', async (req,res) =>{
   const {key} = req.query;
   if(key===''){
@@ -131,6 +169,22 @@ app.get('/api/query', async (req,res) =>{
   } catch (error) {
     console.error('Error searching:', error);
     return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+app.get('/api/recipes/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Find the recipe by ID and update the likes count
+    const recipe = await RecipeDataModel.findById(id);
+    if (!recipe) {
+      return res.status(404).json({ error: 'Recipe not found' });
+    }
+    res.status(201).json(recipe);
+  } catch (error) {
+    console.error('Error updating like count:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

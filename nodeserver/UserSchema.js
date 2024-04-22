@@ -16,9 +16,7 @@ const UserSchema = new mongoose.Schema({
   },
   savedRecipies:[
     {
-    recipe_id:{
-      type:String
-    }
+      type: String,
   }
   ],
 });

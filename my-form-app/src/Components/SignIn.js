@@ -33,6 +33,8 @@ const SignIn = () => {
       if(response.status === 200){
         sessionStorage.setItem('user_name', data.user_name);
         sessionStorage.setItem('user_email', data.user_email);
+        sessionStorage.setItem('user_saved_recipies', JSON.stringify(data.user_saved_recipies));
+        console.log(sessionStorage.getItem('user_save_recipies'))
         navigate('/home')
       }
     } catch (error) {
