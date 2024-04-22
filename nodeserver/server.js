@@ -136,7 +136,6 @@ app.get('/api/user/:email', async (req,res) => {
   const {email} = req.params;
   try{
   const user = await UsersDataModel.findOne({ email });
-  console.log(user)
   return res.status(200).json(user);
   }
   catch(error){
@@ -145,9 +144,45 @@ app.get('/api/user/:email', async (req,res) => {
   }
 });
 
+app.get('/api/user/myrecipies/:email', async (req,res) =>{
+  const {email} = req.params;
+  try{
+    const recipies = await RecipeDataModel.find({ 'author.email' : email })
+    return res.status(200).json(recipies);
+  }
+  catch(error){
+    console.error('Error fetching data:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get('/api/user/mysavedrecipies/:email', async (req,res) =>{
+  const {email} = req.params;
+  try{
+    const user  = await UsersDataModel.findOne({ email: email });
+    const savedRecipies = user.savedRecipies
+    console.log(savedRecipies)
+    const recipies = await RecipeDataModel.find({ _id: { $in: savedRecipies } });
+    return res.status(200).json(recipies);
+  }
+  catch(error){
+    console.error('Error fetching data:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.post('/api/user/logout', async (req,res) => {
+  try{
+    return res.status(200).json({ message: 'Logout successful' });
+  } catch(error){
+    console.error('Error fetching data:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 app.get('/api/query', async (req,res) =>{
   const {key} = req.query;
-  if(key===''){
+  if(key==='' || key==='all'){
     try {
       const recipies = await RecipeDataModel.find({});
       return res.status(200).json(recipies);

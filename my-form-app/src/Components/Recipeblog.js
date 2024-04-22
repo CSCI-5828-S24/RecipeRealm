@@ -31,6 +31,7 @@ const Recipeblog = () => {
   const [loading, setLoading] = useState(true);
   const [comment,setComment] = useState('');
   const [saved, setSaved] = useState(false);
+  const [isUSerAuthor, setIsUserAuthor] = useState(sessionStorage.getItem('user_email')===recipe.author.email);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -125,6 +126,8 @@ const Recipeblog = () => {
               <button className={saved ? 'save-btn-saved' : 'like-btn-unliked'} onClick={handleSaveRecipe}>
                 {saved ? 'Unsave Recipe' : 'Save Recipe'}
               </button>
+              {isUSerAuthor && <button className='edit-button' onClick={handleLikes}>Edit Recipe</button>}
+              {isUSerAuthor && <button className='delete-button' visible={isUSerAuthor} onClick={handleLikes}>Delete Recipe</button>}
               </div>
               <p className="likes">Likes: {likes}</p> 
               <div className="ingredients">

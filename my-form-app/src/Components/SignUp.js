@@ -39,7 +39,6 @@ const SignUp = () => {
         if(response.status === 201){
           sessionStorage.setItem('user_name', data.user_name);
           sessionStorage.setItem('user_email', data.user_email);
-          sessionStorage.setItem('user_saved_recipies', JSON.stringify(data.user_saved_recipies));
           navigate('/home')
         }
       } catch (error) {

@@ -13,6 +13,7 @@ function App() {
         <Route exact path="/" element={<LandingPage/>} />
         <Route exact path="/home" element={<Homescreen/>} />
         <Route exact path="/recipe/:id" element={<Recipeblog/>} />
+        <Route exact path="/logout" element={<LandingPage/>} />
       </Routes>
     </Router>
   );
