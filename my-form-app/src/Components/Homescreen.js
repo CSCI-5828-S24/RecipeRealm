@@ -20,8 +20,8 @@ const Homescreen = () => {
 
   const handleAddRecipe = () => {
     // Handle submission of new recipe data
-    navigate('/addeditrecipe?')
-  };
+    navigate('/addeditrecipe')
+  };    
 
   const handleMenuClick = async (option) => {
     setAnchorEl(null)
