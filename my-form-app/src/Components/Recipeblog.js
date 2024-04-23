@@ -1,8 +1,10 @@
 import '../Styles/Recipeblog.css';
 import React, { useState , useEffect} from 'react';
-import { useLocation , Link, useParams} from 'react-router-dom';
+import { useLocation , Link, useParams, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { ThreeDots } from 'react-loader-spinner';
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 // Component for displaying the recipe
 const Recipeblog = () => {
@@ -31,7 +33,8 @@ const Recipeblog = () => {
   const [loading, setLoading] = useState(true);
   const [comment,setComment] = useState('');
   const [saved, setSaved] = useState(false);
-  const [isUSerAuthor, setIsUserAuthor] = useState(sessionStorage.getItem('user_email')===recipe.author.email);
+  const [isUSerAuthor, setIsUserAuthor] = useState(false);
+  const navigate =  useNavigate();
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -45,6 +48,7 @@ const Recipeblog = () => {
         setComments(response.data.comments);
         const user = await axios.get(`${serverURL}/api/user/${sessionStorage.getItem('user_email')}`);
         setSaved(isValuePresent(user.data.savedRecipies,id));
+        setIsUserAuthor(sessionStorage.getItem('user_email')===response.data.author.email)
       } catch (error) {
         console.error('Error fetching recipe:', error);
       }
@@ -95,6 +99,30 @@ const Recipeblog = () => {
       }
   }
 
+  const handleDelete = async() =>{
+    if(sessionStorage.getItem('user_email')!==recipe.author.email){
+      console.log('Cannot delete post')
+      return
+    }
+    try {
+      console.log(recipe)
+      const response = await axios.delete(`${serverURL}/api/recipes/${id}/delete`);
+      if (response.status!=200) {
+        toast.error('Error deleting the post')
+        throw new Error('Failed to delete post');
+      }
+      else{
+        toast.success('Deleted the post')
+        navigate('/home')
+      }
+    } catch (error) {
+      console.error('Error updating like count:', error);
+    }
+  }
+
+  const handleEdit = async() =>{
+    navigate(`/addeditrecipe`, { state: { recipeData: recipe } });
+  };
 
   const handleSaveRecipe = async() => {
     setSaved(!saved);
@@ -126,8 +154,8 @@ const Recipeblog = () => {
               <button className={saved ? 'save-btn-saved' : 'like-btn-unliked'} onClick={handleSaveRecipe}>
                 {saved ? 'Unsave Recipe' : 'Save Recipe'}
               </button>
-              {isUSerAuthor && <button className='edit-button' onClick={handleLikes}>Edit Recipe</button>}
-              {isUSerAuthor && <button className='delete-button' visible={isUSerAuthor} onClick={handleLikes}>Delete Recipe</button>}
+              {isUSerAuthor && <button className='edit-button' visible={isUSerAuthor} onClick={handleEdit}>Edit Recipe</button>}
+              {isUSerAuthor && <button className='delete-button' visible={isUSerAuthor} onClick={handleDelete}>Delete Recipe</button>}
               </div>
               <p className="likes">Likes: {likes}</p> 
               <div className="ingredients">
@@ -157,6 +185,7 @@ const Recipeblog = () => {
                 ))}
               </div>
             </div>
+            <ToastContainer />
           </div>
   );
 }

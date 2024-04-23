@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LandingPage from './Components/LandingPage';
 import Homescreen from './Components/Homescreen';
 import Recipeblog from './Components/Recipeblog';
-
+import AddEditRecipe from './Components/AddEditRecipe';
 
 function App() {
   return (
@@ -14,6 +14,7 @@ function App() {
         <Route exact path="/home" element={<Homescreen/>} />
         <Route exact path="/recipe/:id" element={<Recipeblog/>} />
         <Route exact path="/logout" element={<LandingPage/>} />
+        <Route exact path="/addeditrecipe" element={<AddEditRecipe/>} />
       </Routes>
     </Router>
   );

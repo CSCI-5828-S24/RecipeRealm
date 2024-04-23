@@ -80,22 +80,19 @@ app.post('/api/login', async (req, res)=>{
 })
 
 
-app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
+app.post('/api/user/addrecipe', upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
-  //console.log(req.body.author_name,req.body.author_email);
-  const recipe = await RecipeDataModel.create({
+  console.log(req.body, req.file.originalname)
+  try{
+    const recipe = await RecipeDataModel.create({
     title: req.body.title,
     description: req.body.description,
     ingredients: req.body.ingredients,
     image:{
     fileName: req.file.originalname,
     filePath: req.file.filename,
-    },
-    comments:{
-      comment:'',
-      commentator:'',
     },
     steps:req.body.steps,
     author:{
@@ -104,9 +101,40 @@ app.post('/api/user/addrecipe', upload.single('image'),async (req, res) => {
     }
   })
   await recipe.save();
-  // Save the file to MongoDB and return the image URL
-  res.send({ recipe });
+  res.status(201).json(recipe)
+  } catch(error){
+    console.error('Error saving recipe:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 });
+
+
+app.put('/api/recipe/:id/editrecipe', async (req, res) => {
+  const {title,ingredients,steps,description} = req.body
+  const {id} = req.params
+  console.log(req.body,id)
+    try{
+      const recipe = await RecipeDataModel.findOneAndUpdate(
+        { "_id": id },
+        { '$set':{
+        'title': title,
+        'description': description,
+        'ingredients': ingredients,
+        'steps':steps
+        }
+        }
+      )
+      console.log(recipe)
+      res.status(201).json(recipe);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+app.get('/api/recipe/:id/editrecipe', async (req,res) => {
+  console.log(req.body)
+})
 
 app.put('/api/user/saverecipe/:id', async (req,res) =>{
   const {user_email,saved} = req.body
@@ -218,7 +246,7 @@ app.get('/api/recipes/:id', async (req, res) => {
     }
     res.status(201).json(recipe);
   } catch (error) {
-    console.error('Error updating like count:', error);
+    console.error('Error retrieving recipe data:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -247,6 +275,18 @@ app.put('/api/recipes/:id/like', async (req, res) => {
   }
 });
 
+app.delete('/api/recipes/:id/delete', async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Find the recipe by ID and update the likes count
+    const recipe = await RecipeDataModel.findByIdAndDelete(id);
+    res.status(200).json('Seccesfully deleted the post');
+  } catch (error) {
+    console.error('Error Deleting the post', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.put('/api/recipes/:id/postcomment', async (req, res) => {
   const { id } = req.params;
   const { comment, commentator } = req.body;
@@ -261,7 +301,7 @@ app.put('/api/recipes/:id/postcomment', async (req, res) => {
     res.status(201).json(updatedRecipe);
 
   } catch (error) {
-    console.error('Error updating like count:', error);
+    console.error('Error posting comments:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

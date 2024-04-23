@@ -2,8 +2,6 @@
 import React, { useEffect } from 'react';
 import '../Styles/Homescreen.css'
 import Card from './Card'
-import RecipeModal from './RecipeModal'
-import AddRecipe from './AddRecipe';
 import { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -20,20 +18,9 @@ const Homescreen = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
 
-  const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
-
-  const openRecipeModal = () => {
-    setIsRecipeModalOpen(true);
-  };
-
-  const closeRecipeModal = () => {
-    setIsRecipeModalOpen(false);
-  };
-
-  const handleAddRecipe = (recipeData) => {
+  const handleAddRecipe = () => {
     // Handle submission of new recipe data
-    console.log('New recipe data:', recipeData);
-    closeRecipeModal();
+    navigate('/addeditrecipe?')
   };
 
   const handleMenuClick = async (option) => {
@@ -91,10 +78,7 @@ const Homescreen = () => {
         <div className="header-content">
           <input type="text" placeholder="Search..." className="search-bar" onChange={(e) => setFilter(e.target.value)}/>
           {loading && <ThreeDots color="#00BFFF" height={24} width={24} />}
-          <button className="homescreenbutton" onClick={openRecipeModal}>Add Your Own Recipe</button>
-          <RecipeModal isOpen={isRecipeModalOpen} onClose={closeRecipeModal}>
-            <AddRecipe onSubmit={handleAddRecipe} />
-          </RecipeModal>
+          <button className="homescreenbutton" onClick={handleAddRecipe}>Add Your Own Recipe</button>
           <ToastContainer />
         </div>
         <button className="menu-button" onClick={(e) => setAnchorEl(e.currentTarget)}>Menu</button>
