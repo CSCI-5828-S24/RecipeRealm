@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate,useLocation, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import '../Styles/AddRecipe.css'
 import { ThreeDots } from 'react-loader-spinner';
@@ -39,7 +39,6 @@ const AddEditRecipe = () => {
         formData.set('ingredients',ingredients);
         formData.set('steps',steps);
         //formData.append('image', image ? image:fetch(`${serverURL}/images/${location.state.recipeData.image.filePath}`));
-        try {
             setLoading(true);
             let response
             if(!location.state){
@@ -47,27 +46,36 @@ const AddEditRecipe = () => {
               formData.append('image',image);
               formData.set('author_name',sessionStorage.getItem('user_name'));
               formData.set('author_email',sessionStorage.getItem('user_email'));
-                response = await axios.post(`${serverURL}/api/user/addrecipe`, formData, {
+                axios.post(`${serverURL}/api/user/addrecipe`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-                })
+                }).then(response => {
+                  if(response.status==201){
+                    navigate('/home',{ replace: true });
+                  } 
+                }).catch(error =>{
+                  console.error(error);
+                }).finally( () => {
+                  setLoading(false);
+                });
             }
             else{
               console.log('if')
-              response =  await axios.put(`${serverURL}/api/recipe/${location.state.recipeData._id}/editrecipe`, {
+              axios.put(`${serverURL}/api/recipe/${location.state.recipeData._id}/editrecipe`, {
               body: {title:title}
-              } )
-            }
-            if(response.status==201)
-              navigate(`/recipe/${response.data._id}`, {state: { recipeData: response.data }});
-        } catch (error) {
-          console.error(error);
-        }
-        finally{
-            setLoading(false);
-        }
-      };
+              } ).then(response => {
+                if(response.status==201){
+                  navigate('/home',{ replace: true });
+                } 
+              }).catch(error =>{
+                console.error(error);
+              }).finally( () => {
+                setLoading(false);
+              });
+            };
+            handleBack();
+    }
 
       if (loading) {
         <div className="loading-spinner">
