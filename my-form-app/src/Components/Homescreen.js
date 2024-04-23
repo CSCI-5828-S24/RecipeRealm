@@ -35,7 +35,8 @@ const Homescreen = () => {
         response = await axios.get(`${serverURL}/api/user/mysavedrecipies/${sessionStorage.getItem('user_email')}`);
         setRecipeList(response.data)
       } else if (option === 'All Recipies') {
-        setFilter('all')
+        setFilter('')
+        handlefilter();
       }else if (option === 'Logout') {
         response = await axios.post(`${serverURL}/api/user/logout`);
         if(response.status==200){
@@ -52,6 +53,19 @@ const Homescreen = () => {
     }
   };
 
+  const handlefilter = () => {
+    setLoading(true);
+    axios.get(`${serverURL}/api/query?key=${filter}`
+  ).then(response => {
+    setRecipeList(response.data);
+  }).catch (error => {
+    console.error('Error fetching data:', error);
+    toast.error('Error fetching data');
+  }).finally(() =>{
+    setLoading(false);
+  })
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -66,7 +80,7 @@ const Homescreen = () => {
       }
     };
     fetchData();
-  }, [filter]);
+  }, []);
 
   if(loading){
     return
@@ -76,8 +90,9 @@ const Homescreen = () => {
     <div className="home-page">
       <div className="header">
         <div className="header-content">
-          <input type="text" placeholder="Search..." className="search-bar" onChange={(e) => setFilter(e.target.value)}/>
+          <input type="text" value = {filter}   placeholder="Search..." className="search-bar" onChange={(e) => setFilter(e.target.value)}/>
           {loading && <ThreeDots color="#00BFFF" height={24} width={24} />}
+          <button className="homescreenbutton" onClick={handlefilter}>Search...</button>
           <button className="homescreenbutton" onClick={handleAddRecipe}>Add Your Own Recipe</button>
           <ToastContainer />
         </div>

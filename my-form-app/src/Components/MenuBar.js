@@ -13,7 +13,6 @@ const MenuBar = ({ anchorEl,isOpen, handleClose, handleMenuClick }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleMenuClick('All Recipies')}>All Recipies</MenuItem>
         <MenuItem onClick={() => handleMenuClick('My Recipes')}>My Recipies</MenuItem>
         <MenuItem onClick={() => handleMenuClick('My Saved Posts')}>My Saved Posts</MenuItem>
         <MenuItem onClick={() => handleMenuClick('Logout')}>Logout</MenuItem>
