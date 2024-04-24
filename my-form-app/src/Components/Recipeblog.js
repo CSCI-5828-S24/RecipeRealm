@@ -168,6 +168,8 @@ const Recipeblog = () => {
             <Link to="/home" className="back-btn">Back to Home</Link> {/* Link to the home page */}
               <h1>{recipe.title}</h1>
               <img src={`${serverURL}/images/${recipe.image.filePath}`} alt={recipe.title} />
+              <h2>Description:</h2>
+              <p>{recipe.description}</p>
               <p className="author">Author: {recipe.author.name}</p>
               <div className='button-container'>
               <button className={liked ? 'like-btn-liked': 'like-btn-unliked'} onClick={handleLikes}>Like</button>

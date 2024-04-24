@@ -29,7 +29,7 @@ const AddEditRecipe = () => {
     }
 
     const handleSubmit = async() => {
-        if(!title || !image || !description || !ingredients || !steps){
+        if(!title || !description || !ingredients || !steps){
           setMessage("Please enter all fields")
           return
         }
@@ -42,7 +42,6 @@ const AddEditRecipe = () => {
             setLoading(true);
             let response
             if(!location.state){
-              console.log('else')
               formData.append('image',image);
               formData.set('author_name',sessionStorage.getItem('user_name'));
               formData.set('author_email',sessionStorage.getItem('user_email'));
@@ -52,7 +51,7 @@ const AddEditRecipe = () => {
                 }
                 }).then(response => {
                   if(response.status==201){
-                    navigate('/home',{ replace: true });
+                    navigate(`/recipe/${response.data._id}`, { state: { recipeData: response.data } });
                   } 
                 }).catch(error =>{
                   console.error(error);
@@ -61,14 +60,18 @@ const AddEditRecipe = () => {
                 });
             }
             else{
-              console.log('if')
-              axios.put(`${serverURL}/api/recipe/${location.state.recipeData._id}/editrecipe`, {
-              body: {title:title}
-              } ).then(response => {
+              axios.put(`${serverURL}/api/recipes/${recipe_id}`, {
+                title,
+                description,
+                ingredients,
+                steps,
+              })
+              .then(response => {
                 if(response.status==201){
-                  navigate('/home',{ replace: true });
-                } 
-              }).catch(error =>{
+                  navigate(`/recipe/${response.data._id}`, { state: { recipeData: response.data } });
+                }
+              })
+              .catch(error =>{
                 console.error(error);
               }).finally( () => {
                 setLoading(false);
