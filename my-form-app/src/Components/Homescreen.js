@@ -27,6 +27,7 @@ const Homescreen = () => {
     setAnchorEl(null)
     try {
       setLoading(true);
+      setFilter('')
       let response;
       if (option === 'My Recipes') {
         response = await axios.get(`${serverURL}/api/user/myrecipies/${sessionStorage.getItem('user_email')}`);
@@ -35,7 +36,6 @@ const Homescreen = () => {
         response = await axios.get(`${serverURL}/api/user/mysavedrecipies/${sessionStorage.getItem('user_email')}`);
         setRecipeList(response.data)
       } else if (option === 'All Recipies') {
-        setFilter('')
         handlefilter();
       }else if (option === 'Logout') {
         response = await axios.post(`${serverURL}/api/user/logout`);

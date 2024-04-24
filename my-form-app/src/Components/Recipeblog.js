@@ -64,19 +64,27 @@ const Recipeblog = () => {
     }
     fetchData();
   }, []);
+  
 
-  const handleCommentSubmit = async() => {
+  useEffect(()=>{handleCommentSubmit();},[comments])
+
+  const handleCommentSubmit = () => {
     if (comment.trim() !== '') {
-      try{
-        const response = await axios.put(`${serverURL}/api/recipes/${recipe._id}/postcomment`, { comment: comment, commentator: sessionStorage.getItem('user_name') });
-        if (response.status!=201) {
-          throw new Error('Failed posting comment');
-        }
-        setComment('')
-        setComments(response.data.UpdatedComments);
-      } catch (error) {
-        console.error('Error updating comment:', error);
-    }
+        setLoading(true)
+        axios.put(`${serverURL}/api/recipes/${recipe._id}/postcomment`, { comment: comment, commentator: sessionStorage.getItem('user_name') })
+        .then(response => {
+          if (response.status!=201) {
+            toast.error('Failed posting comment');
+          }
+          setComment('')
+          setComments(response.data.comments);
+        })
+        .catch(error => {
+          console.error('Error updating comment:', error);
+        })
+        .finally(() => {
+          setLoading(false)
+        });
   }
 };
 
@@ -88,6 +96,7 @@ const Recipeblog = () => {
         setLikes(likes - 1);
       }
       try {
+        setLoading(true)
         console.log(recipe)
         const response = await axios.put(`${serverURL}/api/recipes/${id}/like`, { user_email: sessionStorage.getItem('user_email'), liked: !liked });
         if (response.status!=201) {
@@ -97,6 +106,9 @@ const Recipeblog = () => {
       } catch (error) {
         console.error('Error updating like count:', error);
       }
+      finally{
+        setLoading(false)
+      }
   }
 
   const handleDelete = async() =>{
@@ -105,6 +117,7 @@ const Recipeblog = () => {
       return
     }
     try {
+      setLoading(true)
       console.log(recipe)
       const response = await axios.delete(`${serverURL}/api/recipes/${id}/delete`);
       if (response.status!=200) {
@@ -118,6 +131,9 @@ const Recipeblog = () => {
     } catch (error) {
       console.error('Error updating like count:', error);
     }
+    finally{
+      setLoading(false)
+    }
   }
 
   const handleEdit = async() =>{
@@ -127,6 +143,7 @@ const Recipeblog = () => {
   const handleSaveRecipe = async() => {
     setSaved(!saved);
     try{
+      setLoading(true)
       const response = await axios.put(`${serverURL}/api/user/saverecipe/${id}`, { user_email: sessionStorage.getItem('user_email') , saved: !saved});
       if (response.status!=201) {
         throw new Error('Failed posting comment');
@@ -134,11 +151,14 @@ const Recipeblog = () => {
     } catch (error) {
       console.error('Error updating comment:', error);
     }
+    finally{
+      setLoading(false)
+    }
   };
 
   if (loading) {
     <div className="loading-spinner">
-      <ThreeDots className="spinner" color="#333" height={30} width={30} />
+      <ThreeDots className="spinner" color="#f0f" height={30} width={30} />
     </div>
   }
 
