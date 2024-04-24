@@ -47,3 +47,11 @@
     background-color: #0056b3;
   }
   
+
+img {
+    width: 50vh;
+    height: 50vh;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
