@@ -16,7 +16,8 @@ body {
 }
 
 .recipe img {
-  max-width: 100%;
+  width: 50vh;
+  height: 50vh;
   border-radius: 10px;
   margin-bottom: 20px;
 }

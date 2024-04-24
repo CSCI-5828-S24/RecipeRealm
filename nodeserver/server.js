@@ -225,7 +225,9 @@ app.get('/api/query', async (req,res) =>{
         { title: { $regex: key, $options: 'i' } },
         { description: { $regex: key, $options: 'i' } },
         { ingredients: { $regex: key, $options: 'i' } },
-        { author: { $regex: key, $options: 'i' } },
+        { steps: { $regex: key, $options: 'i' } },
+        { 'author.name': { $regex: key, $options: 'i' } },
+        { 'author.email': { $regex: key, $options: 'i' } },
       ]
     });
     return res.status(200).json(recipes);
