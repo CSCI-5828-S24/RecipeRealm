@@ -136,6 +136,28 @@ app.get('/api/recipe/:id/editrecipe', async (req,res) => {
   console.log(req.body)
 })
 
+app.put('/api/recipes/:id', async (req, res) => {
+  const recipeId = req.params.id;
+  const { title, description, ingredients, steps } = req.body;
+
+  try {
+    const updatedRecipe = await RecipeDataModel.findByIdAndUpdate(
+      recipeId,
+      { title, description, ingredients, steps },
+      { new: true }
+    );
+
+    if (!updatedRecipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    res.status(201).json(updatedRecipe);
+  } catch (error) {
+    console.error('Error updating recipe:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 app.put('/api/user/saverecipe/:id', async (req,res) =>{
   const {user_email,saved} = req.body
   const { id } = req.params;
