@@ -96,7 +96,7 @@ const AddEditRecipe = () => {
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
             <label>Image URL:</label>
             {imageURL && <img src={`${serverURL}/images/${imageURL}`} alt={title} />}
-            <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])}/>
+            {!location.state && <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])}/>}
             <label>Ingredients:</label>
             <textarea value={ingredients} onChange={(e) => setIngredients(e.target.value)} required></textarea>
             <label>Steps:</label>
