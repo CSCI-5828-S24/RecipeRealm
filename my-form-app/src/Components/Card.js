@@ -17,7 +17,7 @@ const Card = ({key,recipe}) => {
       </div>
       <div className="card-details">  
         <h3>{recipe.title}</h3>
-        <p className="description">By {recipe.description}</p>
+        <p className="description">{recipe.description}</p>
         <p className="ingredients">Ingredients: {recipe.ingredients}</p>
         <p className="author">By {recipe.author.name}</p>
         <p className="likes">Likes {recipe.likes}</p>
