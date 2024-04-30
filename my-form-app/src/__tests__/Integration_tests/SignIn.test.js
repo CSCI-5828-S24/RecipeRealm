@@ -94,7 +94,6 @@ import SignIn from '../../Components/SignIn';
 
 describe('SignIn Component - Integration Tests', () => {
   test('Sign In with Valid Credentials', async () => {
-    // Mock fetch request to return success response
     jest.spyOn(global, 'fetch').mockResolvedValueOnce({
       json: jest.fn().mockResolvedValueOnce({ message: 'Success', user_name: 'John', user_email: 'john@example.com' }),
       status: 200,
