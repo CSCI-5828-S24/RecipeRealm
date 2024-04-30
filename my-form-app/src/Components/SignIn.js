@@ -13,9 +13,13 @@ const SignIn = () => {
   const serverURL = process.env.REACT_APP_SERVER_URL;
 
   const handleSignin = async() => {
-    if( !password || !email){
-      console.error('Error:', 'Enter all the fields');
+    if (!email.trim() || !password.trim()) {
       setMessage('Enter all the fields');
+      return;
+    } else if (!isValidEmail(email)) {
+        
+      setMessage('Please enter a valid email');
+      return;
     }
     else{
     try {
@@ -45,6 +49,12 @@ const SignIn = () => {
     }
   }
   };
+
+  const isValidEmail = (email) => {
+    // Simple email format validation
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
 
   return (
     <div className="wrapper">

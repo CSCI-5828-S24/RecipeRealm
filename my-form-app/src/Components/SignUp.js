@@ -15,7 +15,11 @@ const SignUp = () => {
   const serverURL = process.env.REACT_APP_SERVER_URL;
 
   const handleRegister = async () => {
-    if( !password || !name || !email){
+    if (!isValidEmail(email)) {
+      setMessage('Please enter a valid email');
+      return;
+    }
+    else if( !password || !name || !email){
       console.error('Error:', 'Enter all the fields');
       setMessage('Enter all the fields');
     }
@@ -49,6 +53,11 @@ const SignUp = () => {
         setLoading(false);
       }
     }
+    };
+
+    const isValidEmail = (email) => {
+      // Simple email format validation
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
 
   return (

@@ -33,7 +33,7 @@ describe('SignUp Component', () => {
     fireEvent.click(signupButton);
 
     // Check if the error message is present
-    const errorMessage = getByText('Enter all the fields');
+    const errorMessage = getByText('Please enter a valid email');
     expect(errorMessage).toBeInTheDocument();
   });
 
