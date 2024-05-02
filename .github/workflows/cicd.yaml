@@ -19,6 +19,9 @@ jobs:
           npm install
         env: 
           CI: true  
+      - name: Build backend
+        run: npm run build --if-present
+        working-directory: ./nodeserver
 
   deploy: 
     runs-on: ubuntu-latest
