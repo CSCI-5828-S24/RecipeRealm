@@ -28,8 +28,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: npm test
+      - name: npm test install
         run: npm install
+      - name: npm test
         run: npm test
         env: 
           CI: true
