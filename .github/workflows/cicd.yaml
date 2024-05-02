@@ -29,9 +29,7 @@ jobs:
         with:
           node-version: 20
       - name: npm test install
-        run: npm install
-      - name: npm test
-        run: npm test
+        run: npm install && npm test
         env: 
           CI: true
   
