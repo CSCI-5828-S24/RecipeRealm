@@ -28,6 +28,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: npm build
+        run: |
+          npm run build
       - name: npm test
         run: |
           npm test
