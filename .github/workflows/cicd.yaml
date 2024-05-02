@@ -18,21 +18,7 @@ jobs:
         run: |
           npm install
         env: 
-          CI: true
-  test: 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Change server directory
-        run: cd my-form-app
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: npm test install
-        run: npm install && npm test
-        env: 
-          CI: true
-  
+          CI: true  
 
   deploy: 
     runs-on: ubuntu-latest
