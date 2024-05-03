@@ -15,6 +15,13 @@ function App() {
     return hasQueryParams ? <Homescreen /> : null;
   }*/
 
+  function DynamicAddEditRouting() {
+    const params = new URLSearchParams(window.location.search);
+    const hasQueryParams = params.has('');
+    console.log(params)
+    return hasQueryParams ? <Homescreen /> : null;
+  }
+
   return (
     <Router>
       <Routes>
