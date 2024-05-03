@@ -214,55 +214,6 @@ const Recipeblog = () => {
             <ToastContainer />
           </div>
   );
-
-  return (
-    <div className="recipe-container">
-      <div className="recipe">
-      <Link to="/home" className="back-btn">Back to Home</Link> {/* Link to the home page */}
-        <h1>{recipe.title}</h1>
-        <img src={recipe.image} alt={recipe.title} />
-        <h2>Calories: {recipe.calories}</h2>
-        {recipe.health_labels.length>0 &&
-          <div>
-            <h2>Health Labels:</h2>
-          <div className="health-labels">
-          {recipe.health_labels.map((label, index) => (
-              <span key={index} className="health-label">{label}</span>
-          ))}
-          </div>
-          </div>
-        }
-        {recipe.cautions.length>0 && 
-          <div>
-            <h2>Caution Labels:</h2>
-            <div className="caution-labels">
-          {recipe.cautions.map((label, index) => (
-              <span key={index} className="caution-label">{label}</span>
-          ))}
-          </div>
-          </div>
-        }
-       {recipe.dietLabels.length>0 &&
-          <div>
-            <h2>Diet Labels:</h2>
-            <div className="diet-labels">
-          {recipe.dietLabels.map((label, index) => (
-              <span key={index} className="diet-label">{label}</span>
-          ))}
-          </div>
-          </div>
-        }
-        <div className="ingredients">
-        <h2>Ingredients:</h2>
-        {recipe.ingredientsLines.map((label, index) => (
-            <p key={index} className="ingredients">{index+1}) {label}</p>
-          ))}
-        </div>
-        <a href={recipe.sourceSite} rel="noreferrer" target='_blank'>For more Info: {recipe.sourceName}</a>
-      </div>
-      <ToastContainer />
-    </div>
-);
 }
 
 export default Recipeblog;
