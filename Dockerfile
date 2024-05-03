@@ -25,7 +25,7 @@ COPY --from=react-build /app/build ./my-form-app/build
 COPY --from=node-build /app/build ./nodeserver/build
 
 # Expose port 3002 for the Node.js backend
-EXPOSE 3002
+EXPOSE 8080
 
 # Start Node.js server
 CMD ["node", "./nodeserver/build/server.js"]
