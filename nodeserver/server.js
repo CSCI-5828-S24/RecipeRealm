@@ -10,6 +10,7 @@ const UsersDataModel = require('./UserSchema.js');
 const port = process.env.PORT || 3001;
 const fs = require('fs');
 const { stringify } = require('querystring');
+const axios = require('axios')
 
 // Connect to MongoDB Atlas
 mongoose.connect('mongodb+srv://shso8405:Cl72GrKwFvvEgKix@cluster0.ib7jtrh.mongodb.net/')
@@ -28,7 +29,8 @@ mongoose.connect('mongodb+srv://shso8405:Cl72GrKwFvvEgKix@cluster0.ib7jtrh.mongo
   })
 
   const upload = multer({ storage: storage })
-  
+
+
 app.use(cors());
 // Middleware
 app.use(bodyParser.json());
@@ -98,7 +100,8 @@ app.post('/api/user/addrecipe', upload.single('image'), async (req, res) => {
     author:{
       name:req.body.author_name,
       email:req.body.author_email
-    }
+    },
+    source:'mongoDB'
   })
   await recipe.save();
   res.status(201).json(recipe)
@@ -107,34 +110,6 @@ app.post('/api/user/addrecipe', upload.single('image'), async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
-app.put('/api/recipe/:id/editrecipe', async (req, res) => {
-  const {title,ingredients,steps,description} = req.body
-  const {id} = req.params
-  console.log(req.body,id)
-    try{
-      const recipe = await RecipeDataModel.findOneAndUpdate(
-        { "_id": id },
-        { '$set':{
-        'title': title,
-        'description': description,
-        'ingredients': ingredients,
-        'steps':steps
-        }
-        }
-      )
-      console.log(recipe)
-      res.status(201).json(recipe);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-app.get('/api/recipe/:id/editrecipe', async (req,res) => {
-  console.log(req.body)
-})
 
 app.put('/api/recipes/:id', async (req, res) => {
   const recipeId = req.params.id;
@@ -208,6 +183,7 @@ app.get('/api/user/myrecipies/:email', async (req,res) =>{
 
 app.get('/api/user/mysavedrecipies/:email', async (req,res) =>{
   const {email} = req.params;
+  console.log(email)
   try{
     const user  = await UsersDataModel.findOne({ email: email });
     const savedRecipies = user.savedRecipies
@@ -231,16 +207,21 @@ app.post('/api/user/logout', async (req,res) => {
 });
 
 app.get('/api/query', async (req,res) =>{
-  const {key} = req.query;
+  const {key,calories} = req.query;
+  let api_recipes = await dataCollector(key);
+  console.log(api_recipes.length)
+  api_recipes = await caloriesDataAnalyser(api_recipes,calories)
+  console.log(api_recipes.length)
   if(key==='' || key==='all'){
     try {
       const recipies = await RecipeDataModel.find({});
-      return res.status(200).json(recipies);
+      return res.status(200).json(recipies.concat(api_recipes));
     } catch (error) {
       console.error('Error fetching data:', error);
       return res.status(500).json({ message: 'Internal server error' });
     }
   }
+  //iltered_api_recipes = searchRecipesByKeyword(api_recipes,key);
   try {
     const recipes = await RecipeDataModel.find({
       $or: [
@@ -252,7 +233,7 @@ app.get('/api/query', async (req,res) =>{
         { 'author.email': { $regex: key, $options: 'i' } },
       ]
     });
-    return res.status(200).json(recipes);
+    return res.status(200).json(recipes.concat(api_recipes));
   } catch (error) {
     console.error('Error searching:', error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -334,3 +315,74 @@ app.put('/api/recipes/:id/postcomment', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+app.get('/datacollector', async (req, res) => {
+  const recipes = await dataCollector('')
+  return res.status(200).json(recipes)
+})
+
+const dataCollector = async (filter) => {
+  const app_id = 'cde872aa'
+  const app_key = '443cd8985df97b1141c3af7be32b439f'
+  if(filter==''){
+    filter = 'mexican'
+  }
+  try{
+  const response =  await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&app_id=${app_id}&app_key=${app_key}&q=${filter}`)
+  if(response.status == 200){
+    const recipes = response.data.hits.map(hit => {
+      const recipe = hit.recipe;
+      return {
+          url: recipe.url,
+          title: recipe.label,
+          sourceSite:recipe.url,
+          sourceName:recipe.source,
+          ingredientsLines: recipe.ingredientLines,
+          calories: recipe.calories,
+          health_labels: recipe.healthLabels,
+          dietLabels: recipe.dietLabels,
+          cautions: recipe.cautions,
+          image: recipe.image,
+          source:'edamam'
+      };
+    })
+    return recipes;
+  } 
+}
+  catch (error ) {
+    console.error('Error fetching data:', error);
+  }
+}
+
+app.get('/dataAnalyser/sortCalories', async (req, res) => {
+  let recipes = await dataCollector('')
+  recipes = await caloriesDataAnalyser(recipes,'2000')
+  return res.status(200).json(recipes)
+})
+
+const caloriesDataAnalyser = async(recipes,caloriesLimit) => {
+  if(caloriesLimit==='')
+  caloriesLimit = '5000'
+  return recipes.filter(recipe => {
+    return Number(recipe.calories) <= Number(caloriesLimit);
+  }).sort((a, b) => a.calories - b.calories);
+}
+
+app.get('/dataAnalyser/likes', async (req, res) => {
+  const recipes = await likesDataAnalyser()
+  return res.status(200).json(recipes)
+})
+
+const likesDataAnalyser = async() => {
+  try{
+    const recipies = await RecipeDataModel.find({});
+    recipies.sort((a, b) => b.likedby.length - a.likedby.length );
+    return recipies
+  }
+    catch (error ) {
+      console.error('Error fetching data:', error);
+    }
+}
+
+

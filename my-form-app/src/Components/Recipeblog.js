@@ -23,7 +23,7 @@ const Recipeblog = () => {
     }
     return false;
   }
-  const { id } = useParams();
+  
   const location = useLocation();
   const serverURL = process.env.REACT_APP_SERVER_URL;
   const [recipe, setRecipe] = useState(location.state ? location.state.recipeData : null)
@@ -38,16 +38,18 @@ const Recipeblog = () => {
 
   useEffect(() => {
     const fetchRecipe = async () => {
-      if (!recipe) return; 
+      if (!recipe._id){ 
+        setLoading(false)
+        return;} 
       try {
         setLoading(true);
-        const response = await axios.get(`${serverURL}/api/recipes/${id}`);
+        const response = await axios.get(`${serverURL}/api/recipes/${recipe._id}`);
         setRecipe(response.data);
         setLikes(response.data.likedby.length);
         setLiked(isValuePresent(response.data.likedby,sessionStorage.getItem('user_email')))
         setComments(response.data.comments);
         const user = await axios.get(`${serverURL}/api/user/${sessionStorage.getItem('user_email')}`);
-        setSaved(isValuePresent(user.data.savedRecipies,id));
+        setSaved(isValuePresent(user.data.savedRecipies,recipe._id));
         setIsUserAuthor(sessionStorage.getItem('user_email')===response.data.author.email)
       } catch (error) {
         console.error('Error fetching recipe:', error);
@@ -120,7 +122,7 @@ const Recipeblog = () => {
       setLoading(true)
       console.log(recipe)
       const response = await axios.delete(`${serverURL}/api/recipes/${id}/delete`);
-      if (response.status!==200) {
+      if (response.status!=200) {
         toast.error('Error deleting the post')
         throw new Error('Failed to delete post');
       }
@@ -145,7 +147,7 @@ const Recipeblog = () => {
     try{
       setLoading(true)
       const response = await axios.put(`${serverURL}/api/user/saverecipe/${id}`, { user_email: sessionStorage.getItem('user_email') , saved: !saved});
-      if (response.status!==201) {
+      if (response.status!=201) {
         throw new Error('Failed posting comment');
       }
     } catch (error) {
@@ -157,11 +159,13 @@ const Recipeblog = () => {
   };
 
   if (loading) {
+    return(
     <div className="loading-spinner">
       <ThreeDots className="spinner" color="#f0f" height={30} width={30} />
     </div>
+    )
   }
-
+  if(recipe._id)
   return (
           <div className="recipe-container">
             <div className="recipe">
@@ -210,6 +214,55 @@ const Recipeblog = () => {
             <ToastContainer />
           </div>
   );
+
+  return (
+    <div className="recipe-container">
+      <div className="recipe">
+      <Link to="/home" className="back-btn">Back to Home</Link> {/* Link to the home page */}
+        <h1>{recipe.title}</h1>
+        <img src={recipe.image} alt={recipe.title} />
+        <h2>Calories: {recipe.calories}</h2>
+        {recipe.health_labels.length>0 &&
+          <div>
+            <h2>Health Labels:</h2>
+          <div className="health-labels">
+          {recipe.health_labels.map((label, index) => (
+              <span key={index} className="health-label">{label}</span>
+          ))}
+          </div>
+          </div>
+        }
+        {recipe.cautions.length>0 && 
+          <div>
+            <h2>Caution Labels:</h2>
+            <div className="caution-labels">
+          {recipe.cautions.map((label, index) => (
+              <span key={index} className="caution-label">{label}</span>
+          ))}
+          </div>
+          </div>
+        }
+       {recipe.dietLabels.length>0 &&
+          <div>
+            <h2>Diet Labels:</h2>
+            <div className="diet-labels">
+          {recipe.dietLabels.map((label, index) => (
+              <span key={index} className="diet-label">{label}</span>
+          ))}
+          </div>
+          </div>
+        }
+        <div className="ingredients">
+        <h2>Ingredients:</h2>
+        {recipe.ingredientsLines.map((label, index) => (
+            <p key={index} className="ingredients">{index+1}) {label}</p>
+          ))}
+        </div>
+        <a href={recipe.sourceSite} target='_blank'>For more Info: {recipe.sourceName}</a>
+      </div>
+      <ToastContainer />
+    </div>
+);
 }
 
 export default Recipeblog;

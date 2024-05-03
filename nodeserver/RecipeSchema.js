@@ -47,7 +47,8 @@ const RecipeSchema =  new mongoose.Schema({
         type: String,
         required:true,
       }
-    }
+    },
+    source:String
   });
 
   const RecipeDataModel = mongoose.model('RecipeData', RecipeSchema);

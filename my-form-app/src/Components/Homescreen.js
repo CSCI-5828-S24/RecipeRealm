@@ -17,6 +17,7 @@ const Homescreen = () => {
   const serverURL = process.env.REACT_APP_SERVER_URL;
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const [caloriefilter, setCalorieFilter] = useState('');
 
   const handleAddRecipe = () => {
     // Handle submission of new recipe data
@@ -35,7 +36,10 @@ const Homescreen = () => {
       } else if (option === 'My Saved Posts') {
         response = await axios.get(`${serverURL}/api/user/mysavedrecipies/${sessionStorage.getItem('user_email')}`);
         setRecipeList(response.data)
-      } else if (option === 'All Recipies') {
+      }else if (option === 'Most Liked Recipes') {
+        response = await axios.get(`${serverURL}/dataAnalyser/likes`);
+        setRecipeList(response.data)
+      } else if (option === 'All Recipes') {
         handlefilter();
       }else if (option === 'Logout') {
         response = await axios.post(`${serverURL}/api/user/logout`);
@@ -55,7 +59,7 @@ const Homescreen = () => {
 
   const handlefilter = () => {
     setLoading(true);
-    axios.get(`${serverURL}/api/query?key=${filter}`
+    axios.get(`${serverURL}/api/query?key=${filter}&calories=${caloriefilter}`
   ).then(response => {
     setRecipeList(response.data);
   }).catch (error => {
@@ -70,7 +74,7 @@ const Homescreen = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${serverURL}/api/query?key=${filter}`);
+        const response = await axios.get(`${serverURL}/api/query?key=${filter}&calories=${caloriefilter}`);
         setRecipeList(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -82,8 +86,10 @@ const Homescreen = () => {
     fetchData();
   }, [filter, serverURL]);
 
-  if(loading){
-    return
+  if (loading) {
+    <div className="loading-spinner">
+      <ThreeDots className="spinner" color="#fff" height={30} width={30} />
+    </div>
   }
 
   return (
@@ -91,6 +97,7 @@ const Homescreen = () => {
       <div className="header">
         <div className="header-content">
           <input type="text" value = {filter}   placeholder="Search..." className="search-bar" onChange={(e) => setFilter(e.target.value)}/>
+          <input type="text" value = {caloriefilter}   placeholder="Enter maximum calories limit like 1000" className="search-bar" onChange={(e) => setCalorieFilter(e.target.value)}/>
           {loading && <ThreeDots color="#00BFFF" height={24} width={24} />}
           <button className="homescreenbutton" onClick={handlefilter}>Search...</button>
           <button className="homescreenbutton" onClick={handleAddRecipe}>Add Your Own Recipe</button>
