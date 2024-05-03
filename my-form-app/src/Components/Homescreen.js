@@ -39,7 +39,7 @@ const Homescreen = () => {
         handlefilter();
       }else if (option === 'Logout') {
         response = await axios.post(`${serverURL}/api/user/logout`);
-        if(response.status==200){
+        if(response.status===200){
           sessionStorage.removeItem('user_email')
           sessionStorage.removeItem('user_name')
           navigate('/logout')
@@ -80,7 +80,7 @@ const Homescreen = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [filter, serverURL]);
 
   if(loading){
     return
