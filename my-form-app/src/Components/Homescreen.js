@@ -85,7 +85,7 @@ const Homescreen = () => {
       }
     };
     fetchData();
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loading) {
     <div className="loading-spinner">
