@@ -28,7 +28,7 @@ jobs:
       run: npm install
       env: 
           CI: false
-      working-directory: ./my-form-app  # Point to the front-end subdirectory
+      working-directory: ./my-form-app  # Point  to the front-end subdirectory
 
     - name: Build front-end
       run: npm run build
