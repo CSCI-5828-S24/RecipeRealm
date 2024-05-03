@@ -23,7 +23,7 @@ const Recipeblog = () => {
     }
     return false;
   }
-  
+
   const location = useLocation();
   const serverURL = process.env.REACT_APP_SERVER_URL;
   const [recipe, setRecipe] = useState(location.state ? location.state.recipeData : null)
@@ -68,7 +68,7 @@ const Recipeblog = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
 
-  useEffect(()=>{handleCommentSubmit();},[comments])
+  useEffect(()=>{handleCommentSubmit();},[comments]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCommentSubmit = () => {
     if (comment.trim() !== '') {
@@ -101,7 +101,7 @@ const Recipeblog = () => {
         setLoading(true)
         console.log(recipe)
         const response = await axios.put(`${serverURL}/api/recipes/${recipe._id}/like`, { user_email: sessionStorage.getItem('user_email'), liked: !liked });
-        if (response.status!=201) {
+        if (response.status!==201) {
           throw new Error('Failed to update like count');
         }
         setLiked(!liked)
@@ -122,7 +122,7 @@ const Recipeblog = () => {
       setLoading(true)
       console.log(recipe)
       const response = await axios.delete(`${serverURL}/api/recipes/${recipe._id}/delete`);
-      if (response.status!=200) {
+      if (response.status!==200) {
         toast.error('Error deleting the post')
         throw new Error('Failed to delete post');
       }
@@ -147,7 +147,7 @@ const Recipeblog = () => {
     try{
       setLoading(true)
       const response = await axios.put(`${serverURL}/api/user/saverecipe/${recipe._id}`, { user_email: sessionStorage.getItem('user_email') , saved: !saved});
-      if (response.status!=201) {
+      if (response.status!==201) {
         throw new Error('Failed posting comment');
       }
     } catch (error) {
@@ -258,7 +258,7 @@ const Recipeblog = () => {
             <p key={index} className="ingredients">{index+1}) {label}</p>
           ))}
         </div>
-        <a href={recipe.sourceSite} target='_blank'>For more Info: {recipe.sourceName}</a>
+        <a href={recipe.sourceSite} rel="noreferrer" target='_blank'>For more Info: {recipe.sourceName}</a>
       </div>
       <ToastContainer />
     </div>
