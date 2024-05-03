@@ -68,7 +68,7 @@ const Recipeblog = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
 
-  useEffect(()=>{handleCommentSubmit();},[comments])
+  useEffect(()=>{handleCommentSubmit();},[comments, handleCommentSubmit])
 
   const handleCommentSubmit = () => {
     if (comment.trim() !== '') {
@@ -100,8 +100,8 @@ const Recipeblog = () => {
       try {
         setLoading(true)
         console.log(recipe)
-        const response = await axios.put(`${serverURL}/api/recipes/${id}/like`, { user_email: sessionStorage.getItem('user_email'), liked: !liked });
-        if (response.status!=201) {
+        const response = await axios.put(`${serverURL}/api/recipes/${recipe._id}/like`, { user_email: sessionStorage.getItem('user_email'), liked: !liked });
+        if (response.status!==201) {
           throw new Error('Failed to update like count');
         }
         setLiked(!liked)
@@ -122,7 +122,7 @@ const Recipeblog = () => {
       setLoading(true)
       console.log(recipe)
       const response = await axios.delete(`${serverURL}/api/recipes/${recipe._id}/delete`);
-      if (response.status!=200) {
+      if (response.status!==200) {
         toast.error('Error deleting the post')
         throw new Error('Failed to delete post');
       }
@@ -147,7 +147,7 @@ const Recipeblog = () => {
     try{
       setLoading(true)
       const response = await axios.put(`${serverURL}/api/user/saverecipe/${recipe._id}`, { user_email: sessionStorage.getItem('user_email') , saved: !saved});
-      if (response.status!=201) {
+      if (response.status!==201) {
         throw new Error('Failed posting comment');
       }
     } catch (error) {
@@ -214,6 +214,55 @@ const Recipeblog = () => {
             <ToastContainer />
           </div>
   );
+
+  return (
+    <div className="recipe-container">
+      <div className="recipe">
+      <Link to="/home" className="back-btn">Back to Home</Link> {/* Link to the home page */}
+        <h1>{recipe.title}</h1>
+        <img src={recipe.image} alt={recipe.title} />
+        <h2>Calories: {recipe.calories}</h2>
+        {recipe.health_labels.length>0 &&
+          <div>
+            <h2>Health Labels:</h2>
+          <div className="health-labels">
+          {recipe.health_labels.map((label, index) => (
+              <span key={index} className="health-label">{label}</span>
+          ))}
+          </div>
+          </div>
+        }
+        {recipe.cautions.length>0 && 
+          <div>
+            <h2>Caution Labels:</h2>
+            <div className="caution-labels">
+          {recipe.cautions.map((label, index) => (
+              <span key={index} className="caution-label">{label}</span>
+          ))}
+          </div>
+          </div>
+        }
+       {recipe.dietLabels.length>0 &&
+          <div>
+            <h2>Diet Labels:</h2>
+            <div className="diet-labels">
+          {recipe.dietLabels.map((label, index) => (
+              <span key={index} className="diet-label">{label}</span>
+          ))}
+          </div>
+          </div>
+        }
+        <div className="ingredients">
+        <h2>Ingredients:</h2>
+        {recipe.ingredientsLines.map((label, index) => (
+            <p key={index} className="ingredients">{index+1}) {label}</p>
+          ))}
+        </div>
+        <a href={recipe.sourceSite} target='_blank'>For more Info: {recipe.sourceName}</a>
+      </div>
+      <ToastContainer />
+    </div>
+);
 }
 
 export default Recipeblog;
