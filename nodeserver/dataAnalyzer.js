@@ -6,7 +6,7 @@ const cors = require('cors');
 const app = express();
 const multer = require('multer');
 const RecipeDataModel = require('./RecipeSchema.js');
-const port = process.env.PORT || 3003;
+const port = 3003;
 const fs = require('fs');
 const { stringify } = require('querystring');
 const axios = require('axios')
@@ -20,7 +20,7 @@ mongoose.connect('mongodb+srv://shso8405:Cl72GrKwFvvEgKix@cluster0.ib7jtrh.mongo
   .catch(err => console.error('MongoDB Atlas connection error:', err));
 
 
-app.get('/dataAnalyzer/sortCalories', async (req, res) => {
+app.get('/sortCalories', async (req, res) => {
     let filter = req.query.filter;
     let caloriesLimit = req.query.caloriesLimit;
     const app_id = 'cde872aa'
@@ -65,7 +65,7 @@ app.get('/dataAnalyzer/sortCalories', async (req, res) => {
 
 
 
-  app.get('/dataAnalyzer/likes', async (req, res) => {
+  app.get('/likes', async (req, res) => {
 
     try{
         const recipies = await RecipeDataModel.find({});
