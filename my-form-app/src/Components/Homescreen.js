@@ -65,7 +65,7 @@ const Homescreen = () => {
     try {
       setLoading(true);
       const response1 = await axios.get(`${serverURL}/api/query?key=${filter}`);
-      const response2  = await axios.get(`${dataAnalyzer}/sortCalories?filter=${key}&caloriesLimit=${caloriefilter}`);
+      const response2  = await axios.get(`${dataAnalyzer}/sortCalories?filter=${filter}&caloriesLimit=${caloriefilter}`);
       const recipes1 = response1.data
       const recipes2 = response2.data
       setRecipeList(recipes1.concat(recipes2));
