@@ -7,7 +7,7 @@ const app = express();
 const multer = require('multer');
 const RecipeDataModel = require('./RecipeSchema.js');
 const UsersDataModel = require('./UserSchema.js');
-const port = process.env.PORT || 3002;
+const port = 3002;
 const fs = require('fs');
 const { stringify } = require('querystring');
 const axios = require('axios')
@@ -17,7 +17,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-app.get('/dataCollector/filter', async (req, res) => {
+app.get('/filter', async (req, res) => {
     const { filter } = req.params;
     const app_id = 'cde872aa'
     const app_key = '443cd8985df97b1141c3af7be32b439f'
