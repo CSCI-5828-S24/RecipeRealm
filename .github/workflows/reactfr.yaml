@@ -1,0 +1,40 @@
+name: Tests
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x, 18.x]
+        # See supported Node.js  release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Install front-end dependencies
+      run: npm install
+      env:
+          CI: false
+      working-directory: ./my-form-app  # Point to the front-end subdirectory
+
+    - name: Build front-end
+      run: npm run build
+      env:
+          CI: false
+      working-directory: ./my-form-app
+
+    - name: Test front-end
+      run: npm test
+      env:
+          CI: false
+      working-directory: ./my-form-app
