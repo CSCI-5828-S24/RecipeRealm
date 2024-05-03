@@ -15,6 +15,8 @@ const Homescreen = () => {
   const [recipeList,setRecipeList] = useState(null);
   const [loading, setLoading] = useState(false);
   const serverURL = process.env.REACT_APP_SERVER_URL;
+  const dataCollectorURL = process.env.DATA_COLLECTOR_SERVER_URL;
+  const dataAnalyzer = process.env.DATA_ANALYSER_SERVER_URL;
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
   const [caloriefilter, setCalorieFilter] = useState('');
@@ -38,7 +40,7 @@ const Homescreen = () => {
         response = await axios.get(`${serverURL}/api/user/mysavedrecipies/${sessionStorage.getItem('user_email')}`);
         setRecipeList(response.data)
       }else if (option === 'Most Liked Recipes') {
-        response = await axios.get(`${serverURL}/dataAnalyser/likes`);
+        response = await axios.get(`${dataAnalyzer}/likes`);
         setRecipeList(response.data)
       } else if (option === 'All Recipes') {
         handlefilter();
@@ -58,33 +60,25 @@ const Homescreen = () => {
     }
   };
 
-  const handlefilter = () => {
+  const handlefilter = async() => {
     setLoading(true);
-    axios.get(`${serverURL}/api/query?key=${filter}&calories=${caloriefilter}`
-  ).then(response => {
-    setRecipeList(response.data);
-  }).catch (error => {
-    console.error('Error fetching data:', error);
-    toast.error('Error fetching data');
-  }).finally(() =>{
-    setLoading(false);
-  })
+    try {
+      setLoading(true);
+      const response1 = await axios.get(`${serverURL}/api/query?key=${filter}`);
+      const response2  = await axios.get(`${dataAnalyzer}/sortCalories?filter=${key}&caloriesLimit=${caloriefilter}`);
+      const recipes1 = response1.data
+      const recipes2 = response2.data
+      setRecipeList(recipes1.concat(recipes2));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast.error('Error fetching data');
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${serverURL}/api/query?key=${filter}&calories=${caloriefilter}`);
-        setRecipeList(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        toast.error('Error fetching data');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    handlefilter();
   }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) {

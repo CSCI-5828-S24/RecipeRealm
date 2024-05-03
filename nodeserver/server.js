@@ -7,15 +7,10 @@ const app = express();
 const multer = require('multer');
 const RecipeDataModel = require('./RecipeSchema.js');
 const UsersDataModel = require('./UserSchema.js');
-const port = 3001;
+const port = process.env.PORT || 3001;
 const fs = require('fs');
 const { stringify } = require('querystring');
 const axios = require('axios')
-require('dotenv').config();
-
-
-const datacollectorURL = process.env.DATA_COLLECTOR_SERVER_URL;
-const dataanalyzerURL = process.env.DATA_ANALYSER_SERVER_URL;
 
 // Connect to MongoDB Atlas
 mongoose.connect('mongodb+srv://shso8405:Cl72GrKwFvvEgKix@cluster0.ib7jtrh.mongodb.net/')
@@ -212,18 +207,12 @@ app.post('/api/user/logout', async (req,res) => {
 });
 
 app.get('/api/query', async (req,res) =>{
-  const {key,calories} = req.query;
-  console.log(key==='',calories==='')
-  let api_recipes
+  const {key} = req.query;
   try{
-    console.log(`${datacollectorURL}/filter?filter=${key}`,`${dataanalyzerURL}/sortCalories?filter=${key}&caloriesLimit=${calories}`)
-  //api_recipes = await axios.get(`${datacollectorURL}/filter?filter=${key}`);
-    const response  = await axios.get(`${dataanalyzerURL}/sortCalories?filter=${key}&caloriesLimit=${calories}`);
-    api_recipes = response.data
   if(key==='' || key==='all'){
     try {
       const recipies = await RecipeDataModel.find({});
-      return res.status(200).json(recipies.concat(api_recipes));
+      return res.status(200).json(recipies);
     } catch (error) {
       console.error('Error fetching data:', error);
       return res.status(500).json({ message: 'Internal server error' });
@@ -239,7 +228,7 @@ app.get('/api/query', async (req,res) =>{
         { 'author.email': { $regex: key, $options: 'i' } },
       ]
     });
-    return res.status(200).json(recipes.concat(api_recipes));
+    return res.status(200).json(recipes);
   } catch (error) {
     console.error('Error searching:', error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -313,16 +302,6 @@ app.put('/api/recipes/:id/postcomment', async (req, res) => {
 
   } catch (error) {
     console.error('Error posting comments:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.get('/dataAnalyser/likes', async (req, res) => {
-  try{
-    const recipies  = await axios.get(`${dataanalyzerURL}/likes`);
-    return res.status(200).json(recipies.data)
-  }catch (error) {
-    console.error('Error Analyzing likes:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
