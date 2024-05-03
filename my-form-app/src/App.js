@@ -1,19 +1,12 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LandingPage from './Components/LandingPage';
 import Homescreen from './Components/Homescreen';
 import Recipeblog from './Components/Recipeblog';
 import AddEditRecipe from './Components/AddEditRecipe';
 
 function App() {
-
-  function DynamicAddEditRouting() {
-    const params = new URLSearchParams(window.location.search);
-    const hasQueryParams = params.has('');
-    console.log(params)
-    return hasQueryParams ? <Homescreen /> : null;
-  }
 
   return (
     <Router>

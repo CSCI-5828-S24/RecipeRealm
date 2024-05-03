@@ -1,5 +1,5 @@
-import React, { useEffect, useState} from 'react';
-import { useNavigate,useLocation, Navigate } from 'react-router-dom';
+import React, { useState} from 'react';
+import { useNavigate,useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../Styles/AddRecipe.css'
 import { ThreeDots } from 'react-loader-spinner';
@@ -18,7 +18,6 @@ const AddEditRecipe = () => {
     const recipe_id = location.state ? location.state.recipeData._id : null
     const imageURL = location.state ? location.state.recipeData.image.filePath: null
     const [loading, setLoading] = useState(true);
-    const [recipe,setRecipe] = useState(null)
     console.log(`${serverURL}/api/recipe/${recipe_id}/editrecipe`)
 
     const handleBack = () =>{
@@ -40,7 +39,6 @@ const AddEditRecipe = () => {
         formData.set('steps',steps);
         //formData.append('image', image ? image:fetch(`${serverURL}/images/${location.state.recipeData.image.filePath}`));
             setLoading(true);
-            let response
             if(!location.state){
               formData.append('image',image);
               formData.set('author_name',sessionStorage.getItem('user_name'));
@@ -50,7 +48,7 @@ const AddEditRecipe = () => {
                     'Content-Type': 'multipart/form-data'
                 }
                 }).then(response => {
-                  if(response.status==201){
+                  if(response.status===201){
                     navigate(`/recipe/${response.data._id}`, { state: { recipeData: response.data } });
                   } 
                 }).catch(error =>{
@@ -67,7 +65,7 @@ const AddEditRecipe = () => {
                 steps,
               })
               .then(response => {
-                if(response.status==201){
+                if(response.status===201){
                   navigate(`/recipe/${response.data._id}`, { state: { recipeData: response.data } });
                 }
               })
