@@ -18,7 +18,6 @@ const AddEditRecipe = () => {
     const recipe_id = location.state ? location.state.recipeData._id : null
     const imageURL = location.state ? location.state.recipeData.image.filePath: null
     const [loading, setLoading] = useState(true);
-    console.log(`${serverURL}/api/recipe/${recipe_id}/editrecipe`)
 
     const handleBack = () =>{
         if(location.state)

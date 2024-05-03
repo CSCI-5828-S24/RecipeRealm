@@ -11,6 +11,11 @@ const port = process.env.PORT || 3001;
 const fs = require('fs');
 const { stringify } = require('querystring');
 const axios = require('axios')
+require('dotenv').config();
+
+
+const datacollectorURL = process.env.DATA_COLLECTOR_SERVER_URL;
+const dataanalyzerURL = process.env.DATA_ANALYSER_SERVER_URL;
 
 // Connect to MongoDB Atlas
 mongoose.connect('mongodb+srv://shso8405:Cl72GrKwFvvEgKix@cluster0.ib7jtrh.mongodb.net/')
@@ -208,10 +213,13 @@ app.post('/api/user/logout', async (req,res) => {
 
 app.get('/api/query', async (req,res) =>{
   const {key,calories} = req.query;
-  let api_recipes = await dataCollector(key);
-  console.log(api_recipes.length)
-  api_recipes = await caloriesDataAnalyser(api_recipes,calories)
-  console.log(api_recipes.length)
+  console.log(key==='',calories==='')
+  let api_recipes
+  try{
+    console.log(`${datacollectorURL}/filter?filter=${key}`,`${dataanalyzerURL}/sortCalories?filter=${key}&caloriesLimit=${calories}`)
+  //api_recipes = await axios.get(`${datacollectorURL}/filter?filter=${key}`);
+    const response  = await axios.get(`${dataanalyzerURL}/sortCalories?filter=${key}&caloriesLimit=${calories}`);
+    api_recipes = response.data
   if(key==='' || key==='all'){
     try {
       const recipies = await RecipeDataModel.find({});
@@ -221,8 +229,6 @@ app.get('/api/query', async (req,res) =>{
       return res.status(500).json({ message: 'Internal server error' });
     }
   }
-  //iltered_api_recipes = searchRecipesByKeyword(api_recipes,key);
-  try {
     const recipes = await RecipeDataModel.find({
       $or: [
         { title: { $regex: key, $options: 'i' } },
@@ -311,78 +317,19 @@ app.put('/api/recipes/:id/postcomment', async (req, res) => {
   }
 });
 
+app.get('/dataAnalyser/likes', async (req, res) => {
+  try{
+    const recipies  = await axios.get(`${dataanalyzerURL}/likes`);
+    return res.status(200).json(recipies.data)
+  }catch (error) {
+    console.error('Error Analyzing likes:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
-
-
-app.get('/datacollector', async (req, res) => {
-  const recipes = await dataCollector('')
-  return res.status(200).json(recipes)
-})
-
-const dataCollector = async (filter) => {
-  const app_id = 'cde872aa'
-  const app_key = '443cd8985df97b1141c3af7be32b439f'
-  if(filter==''){
-    filter = 'mexican'
-  }
-  try{
-  const response =  await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&app_id=${app_id}&app_key=${app_key}&q=${filter}`)
-  if(response.status == 200){
-    const recipes = response.data.hits.map(hit => {
-      const recipe = hit.recipe;
-      return {
-          url: recipe.url,
-          title: recipe.label,
-          sourceSite:recipe.url,
-          sourceName:recipe.source,
-          ingredientsLines: recipe.ingredientLines,
-          calories: recipe.calories,
-          health_labels: recipe.healthLabels,
-          dietLabels: recipe.dietLabels,
-          cautions: recipe.cautions,
-          image: recipe.image,
-          source:'edamam'
-      };
-    })
-    return recipes;
-  } 
-}
-  catch (error ) {
-    console.error('Error fetching data:', error);
-  }
-}
-
-app.get('/dataAnalyser/sortCalories', async (req, res) => {
-  let recipes = await dataCollector('')
-  recipes = await caloriesDataAnalyser(recipes,'2000')
-  return res.status(200).json(recipes)
-})
-
-const caloriesDataAnalyser = async(recipes,caloriesLimit) => {
-  if(caloriesLimit==='')
-  caloriesLimit = '5000'
-  return recipes.filter(recipe => {
-    return Number(recipe.calories) <= Number(caloriesLimit);
-  }).sort((a, b) => a.calories - b.calories);
-}
-
-app.get('/dataAnalyser/likes', async (req, res) => {
-  const recipes = await likesDataAnalyser()
-  return res.status(200).json(recipes)
-})
-
-const likesDataAnalyser = async() => {
-  try{
-    const recipies = await RecipeDataModel.find({});
-    recipies.sort((a, b) => b.likedby.length - a.likedby.length );
-    return recipies
-  }
-    catch (error ) {
-      console.error('Error fetching data:', error);
-    }
-}
 
 
