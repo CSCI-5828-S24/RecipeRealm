@@ -12,5 +12,13 @@
     "start": "node server.js",
     "build": "npm i",
     "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.5",
+    "@babel/plugin-transform-runtime": "^7.24.3",
+    "@babel/preset-env": "^7.24.5",
+    "@babel/preset-react": "^7.24.1",
+    "babel-jest": "^29.7.0",
+    "jest": "^27.5.1"
   }
 }
