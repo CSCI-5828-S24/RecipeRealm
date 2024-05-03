@@ -13,6 +13,8 @@
   },
   "scripts": {
     "start": "node /nodeserver/server.js",
+    "dataCollector": "node /nodeserver/dataCollector.js",
+    "dataAnalyzer": "node /nodeserver/dataAnalyzer.js",
     "build": "npm i"
   }
 }
