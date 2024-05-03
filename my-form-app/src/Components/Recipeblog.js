@@ -23,7 +23,7 @@ const Recipeblog = () => {
     }
     return false;
   }
-
+  const { id } = useParams();
   const location = useLocation();
   const serverURL = process.env.REACT_APP_SERVER_URL;
   const [recipe, setRecipe] = useState(location.state ? location.state.recipeData : null)
