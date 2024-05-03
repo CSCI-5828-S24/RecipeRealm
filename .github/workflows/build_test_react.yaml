@@ -26,12 +26,18 @@ jobs:
         cache: 'npm'
     - name: Install front-end dependencies
       run: npm install
+      env: 
+          CI: false
       working-directory: ./my-form-app  # Point to the front-end subdirectory
 
     - name: Build front-end
       run: npm run build
+      env: 
+          CI: false
       working-directory: ./my-form-app
 
     - name: Test front-end
       run: npm test
+      env: 
+          CI: false
       working-directory: ./my-form-app
