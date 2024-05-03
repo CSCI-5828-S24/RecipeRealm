@@ -29,6 +29,7 @@ const Homescreen = () => {
     try {
       setLoading(true);
       setFilter('')
+      setCalorieFilter('')
       let response;
       if (option === 'My Recipes') {
         response = await axios.get(`${serverURL}/api/user/myrecipies/${sessionStorage.getItem('user_email')}`);
@@ -84,7 +85,7 @@ const Homescreen = () => {
       }
     };
     fetchData();
-  }, [filter, serverURL]);
+  }, []);
 
   if (loading) {
     <div className="loading-spinner">

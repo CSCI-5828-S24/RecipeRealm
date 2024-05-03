@@ -7,13 +7,6 @@ import Recipeblog from './Components/Recipeblog';
 import AddEditRecipe from './Components/AddEditRecipe';
 
 function App() {
-  /* unused function
-  function DynamicAddEditRouting() {
-    const params = new URLSearchParams(window.location.search);
-    const hasQueryParams = params.has('');
-    console.log(params)
-    return hasQueryParams ? <Homescreen /> : null;
-  }*/
 
   return (
     <Router>

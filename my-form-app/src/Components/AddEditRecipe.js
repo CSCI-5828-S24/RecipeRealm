@@ -18,7 +18,7 @@ const AddEditRecipe = () => {
     const recipe_id = location.state ? location.state.recipeData._id : null
     const imageURL = location.state ? location.state.recipeData.image.filePath: null
     const [loading, setLoading] = useState(true);
-    // const [recipe,setRecipe] = useState(null)
+    const [recipe,setRecipe] = useState(null)
     console.log(`${serverURL}/api/recipe/${recipe_id}/editrecipe`)
 
     const handleBack = () =>{
@@ -40,7 +40,7 @@ const AddEditRecipe = () => {
         formData.set('steps',steps);
         //formData.append('image', image ? image:fetch(`${serverURL}/images/${location.state.recipeData.image.filePath}`));
             setLoading(true);
-        //    let response
+            let response
             if(!location.state){
               formData.append('image',image);
               formData.set('author_name',sessionStorage.getItem('user_name'));
