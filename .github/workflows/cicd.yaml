@@ -38,3 +38,4 @@ jobs:
           heroku_email: ${{secrets.HEROKU_EMAIL}}
       - name: npm depl
         run: npm start
+        working-directory: ./nodeserver
