@@ -101,7 +101,7 @@ const Recipeblog = () => {
         setLoading(true)
         console.log(recipe)
         const response = await axios.put(`${serverURL}/api/recipes/${id}/like`, { user_email: sessionStorage.getItem('user_email'), liked: !liked });
-        if (response.status!==201) {
+        if (response.status!=201) {
           throw new Error('Failed to update like count');
         }
         setLiked(!liked)
@@ -121,7 +121,7 @@ const Recipeblog = () => {
     try {
       setLoading(true)
       console.log(recipe)
-      const response = await axios.delete(`${serverURL}/api/recipes/${id}/delete`);
+      const response = await axios.delete(`${serverURL}/api/recipes/${recipe._id}/delete`);
       if (response.status!=200) {
         toast.error('Error deleting the post')
         throw new Error('Failed to delete post');
@@ -146,7 +146,7 @@ const Recipeblog = () => {
     setSaved(!saved);
     try{
       setLoading(true)
-      const response = await axios.put(`${serverURL}/api/user/saverecipe/${id}`, { user_email: sessionStorage.getItem('user_email') , saved: !saved});
+      const response = await axios.put(`${serverURL}/api/user/saverecipe/${recipe._id}`, { user_email: sessionStorage.getItem('user_email') , saved: !saved});
       if (response.status!=201) {
         throw new Error('Failed posting comment');
       }
