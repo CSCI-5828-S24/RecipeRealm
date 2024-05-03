@@ -11,10 +11,10 @@ WORKDIR /app
 
 
 # Copy built Node.js backend
-COPY --from=node-build /app/build ./nodeserver/build
+COPY --from=node-build /app/build ./build
 
 # Expose port 3002 for the Node.js backend
 EXPOSE 8080
 
 # Start Node.js server
-CMD ["node", "./nodeserver/build/server.js"]
+CMD ["node", "./build/server.js"]
