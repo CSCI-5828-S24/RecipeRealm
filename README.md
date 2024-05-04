@@ -3,13 +3,17 @@
 ## Introduction:
 The Recipe Sharing Platform is a web application designed to provide users with a centralized platform to discover, share, and explore culinary creations. It aims to bring together food enthusiasts, home cooks, and professional chefs to exchange recipes, cooking tips, and culinary experiences.
 
+![image](https://github.com/CSCI-5828-S24/RecipeRealm/assets/53361534/1ced6896-31f4-4917-ae66-2a0bdb8c9518)
+
+
 ## Key Features:
 
 User Authentication: Users can sign up for an account, log in securely, and manage their profiles.\
 Recipe Discovery: Users can browse recipes by categories, search for specific recipes, and receive personalized recommendations.\
 Recipe Details: Detailed recipe information including ingredients, cooking instructions, preparation time, and serving size.\
-Social Interaction: Users leave comments, like and save recipies\
-Recipe Contribution: Users can upload their own recipes, edit or delete them\
+Social Interaction: Users can rate recipes, leave comments, share cooking experiences, and participate in community challenges.\
+Recipe Contribution: Users can upload their own recipes, edit or delete them, and create collections or lists.\
+Offline Access: Users can access recipes offline through downloadable or printable formats.
 
 
 ## Technology Stack:
@@ -21,11 +25,8 @@ Additional Libraries: Axios for HTTP requests, and Mongoose for MongoDB object m
 
 ## Deploying the System
 
-For deploying our Recipe Sharing Platform, we've chosen Google Cloud Platform (GCP) as our cloud infrastructure provider. GCP offers a robust and scalable environment for hosting web applications, providing services such as Google Compute Engine for virtual machines, Google Kubernetes Engine for containerized applications, and Google Cloud Storage for storing assets and media files.
+For deploying our Recipe Sharing Platform, we've chosen Heroku as our cloud infrastructure provider. Heroku offers a robust and scalable environment for hosting web applications, and for front-end we have chosen netlify. Explained further in the final submission wiki.
 
-We've opted to deploy our frontend React.js application using Google Cloud Storage for static website hosting. This allows us to easily serve our static assets, such as HTML, CSS, and JavaScript files, with high availability and low latency.
-
-For the backend Node.js and Express.js application, we're leveraging Google Kubernetes Engine (GKE) to orchestrate and manage our containerized application. GKE offers features like auto-scaling, load balancing, and automated updates, ensuring reliability and scalability for our backend services. Additionally, we're using Google Cloud SQL for MongoDB, which provides a fully managed MongoDB database service, ensuring data persistence and scalability without the operational overhead of managing database infrastructure.
 
 ## Design Decisions
 
