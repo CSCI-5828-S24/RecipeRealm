@@ -10,7 +10,6 @@ Recipe Discovery: Users can browse recipes by categories, search for specific re
 Recipe Details: Detailed recipe information including ingredients, cooking instructions, preparation time, and serving size.\
 Social Interaction: Users can rate recipes, leave comments, share cooking experiences, and participate in community challenges.\
 Recipe Contribution: Users can upload their own recipes, edit or delete them, and create collections or lists.\
-Notifications: Users receive notifications for new recipes, comments, likes, and other relevant activities.\
 Offline Access: Users can access recipes offline through downloadable or printable formats.
 
 
@@ -23,11 +22,8 @@ Additional Libraries: Axios for HTTP requests, and Mongoose for MongoDB object m
 
 ## Deploying the System
 
-For deploying our Recipe Sharing Platform, we've chosen Google Cloud Platform (GCP) as our cloud infrastructure provider. GCP offers a robust and scalable environment for hosting web applications, providing services such as Google Compute Engine for virtual machines, Google Kubernetes Engine for containerized applications, and Google Cloud Storage for storing assets and media files.
+For deploying our Recipe Sharing Platform, we've chosen Heroku as our cloud infrastructure provider. Heroku offers a robust and scalable environment for hosting web applications, and for front-end we have chosen netlify. Explained further in the final submission wiki.
 
-We've opted to deploy our frontend React.js application using Google Cloud Storage for static website hosting. This allows us to easily serve our static assets, such as HTML, CSS, and JavaScript files, with high availability and low latency.
-
-For the backend Node.js and Express.js application, we're leveraging Google Kubernetes Engine (GKE) to orchestrate and manage our containerized application. GKE offers features like auto-scaling, load balancing, and automated updates, ensuring reliability and scalability for our backend services. Additionally, we're using Google Cloud SQL for MongoDB, which provides a fully managed MongoDB database service, ensuring data persistence and scalability without the operational overhead of managing database infrastructure.
 
 ## Design Decisions
 
@@ -49,19 +45,3 @@ Our frontend developers are responsible for implementing user authentication, re
 
 Throughout the development process, we conduct regular stand-up meetings to discuss progress, address any challenges or blockers, and ensure alignment across team members. By distributing work effectively and maintaining open communication channels, we're able to collaborate efficiently and deliver high-quality features on schedule.
 
-## Final Project submission
-|Topic|# Links|
-|:---|:---:|
-|[Web application basic form, reporting]()|🔗:|
-|[Data collection1]()|🔗:|
-|[Data analyzer]()|🔗:|
-|[Unit tests]()|🔗:|
-|[Data persistence any data store]()|🔗:|
-|[Rest collaboration internal or API endpoint]()|🔗:|
-|[Product environment]()|🔗:|
-|[Using mock objects or any test doubles]()|🔗:|
-|[Continuous integration]()|🔗:|
-|[Production monitoring instrumenting]()|🔗:|
-|[Acceptance tests]()|🔗:|
-|[Event collaboration messaging]()|🔗:|
-|[Continuous delivery]()|🔗:|
