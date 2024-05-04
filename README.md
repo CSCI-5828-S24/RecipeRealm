@@ -3,6 +3,9 @@
 ## Introduction:
 The Recipe Sharing Platform is a web application designed to provide users with a centralized platform to discover, share, and explore culinary creations. It aims to bring together food enthusiasts, home cooks, and professional chefs to exchange recipes, cooking tips, and culinary experiences.
 
+![image](https://github.com/CSCI-5828-S24/RecipeRealm/assets/53361534/1ced6896-31f4-4917-ae66-2a0bdb8c9518)
+
+
 ## Key Features:
 
 User Authentication: Users can sign up for an account, log in securely, and manage their profiles.\
