@@ -48,3 +48,20 @@ For each iteration of development, we've divided and assigned tasks to team memb
 Our frontend developers are responsible for implementing user authentication, recipe discovery features, and user profile management on the frontend React.js application. Meanwhile, our backend developers are tasked with developing RESTful APIs, integrating with MongoDB for data storage, and implementing social interaction features like rating, commenting, and notifications on the backend Node.js and Express.js application.
 
 Throughout the development process, we conduct regular stand-up meetings to discuss progress, address any challenges or blockers, and ensure alignment across team members. By distributing work effectively and maintaining open communication channels, we're able to collaborate efficiently and deliver high-quality features on schedule.
+
+## Final Project submission
+|Topic|# Links|
+|:---|:---:|
+|[Web application basic form, reporting]()|🔗:|
+|[Data collection1]()|🔗:|
+|[Data analyzer]()|🔗:|
+|[Unit tests]()|🔗:|
+|[Data persistence any data store]()|🔗:|
+|[Rest collaboration internal or API endpoint]()|🔗:|
+|[Product environment]()|🔗:|
+|[Using mock objects or any test doubles]()|🔗:|
+|[Continuous integration]()|🔗:|
+|[Production monitoring instrumenting]()|🔗:|
+|[Acceptance tests]()|🔗:|
+|[Event collaboration messaging]()|🔗:|
+|[Continuous delivery]()|🔗:|
