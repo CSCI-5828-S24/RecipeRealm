@@ -8,10 +8,8 @@ The Recipe Sharing Platform is a web application designed to provide users with 
 User Authentication: Users can sign up for an account, log in securely, and manage their profiles.\
 Recipe Discovery: Users can browse recipes by categories, search for specific recipes, and receive personalized recommendations.\
 Recipe Details: Detailed recipe information including ingredients, cooking instructions, preparation time, and serving size.\
-Social Interaction: Users can rate recipes, leave comments, share cooking experiences, and participate in community challenges.\
-Recipe Contribution: Users can upload their own recipes, edit or delete them, and create collections or lists.\
-Notifications: Users receive notifications for new recipes, comments, likes, and other relevant activities.\
-Offline Access: Users can access recipes offline through downloadable or printable formats.
+Social Interaction: Users leave comments, like and save recipies\
+Recipe Contribution: Users can upload their own recipes, edit or delete them\
 
 
 ## Technology Stack:
