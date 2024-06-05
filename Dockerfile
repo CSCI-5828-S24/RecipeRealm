@@ -1,14 +1,19 @@
 # Stage 2: Build Node.js backend
-FROM node:14-alpine as node-build
-WORKDIR /app
-COPY nodeserver/package*.json ./
-RUN npm install
-COPY nodeserver .
+FROM node:latest
+
+COPY nodeserver/package.json /app/
+COPY nodeserver/images /app/
+COPY nodeserver/server.js /app/
+COPY nodeserver/RecipeSchema.js /app/
+COPY nodeserver/UserSchema.js /app/
+
 
 WORKDIR /app
+
+RUN npm install
 
 # Expose port 3002 for the Node.js backend
 #EXPOSE 3002
 
 # Start Node.js server
-CMD ["node", "./nodeserver/server.js"]
+CMD ["node", "server.js"]
